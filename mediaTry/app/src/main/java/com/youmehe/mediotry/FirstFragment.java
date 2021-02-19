@@ -8,6 +8,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -33,13 +34,21 @@ public class FirstFragment extends Fragment {
       }
     });
     initSurface(view.findViewById(R.id.surface));
+    //showVideoImage(view.findViewById(R.id.image));
+  }
+
+  public void showVideoImage(ImageView imageView) {
+    MyH264Player2 myH264Player = new MyH264Player2(getActivity(),
+        new File(Environment.getExternalStorageDirectory(), "output.h265").getAbsolutePath(),
+        imageView);
+    myH264Player.play();
   }
 
   public void initSurface(SurfaceView surfaceView) {
     surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
       @Override public void surfaceCreated(@NonNull SurfaceHolder holder) {
         MyH264Player myH264Player = new MyH264Player(getActivity(),
-            new File(Environment.getExternalStorageDirectory(), "out.h264").getAbsolutePath(),
+            new File(Environment.getExternalStorageDirectory(), "output.h265").getAbsolutePath(),
             holder.getSurface());
         myH264Player.play();
       }

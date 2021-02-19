@@ -1,10 +1,17 @@
 package com.youmehe.mediotry;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.util.Log;
 import android.view.Surface;
+import android.widget.ImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -16,23 +23,24 @@ import java.nio.ByteBuffer;
 /**
  * Created by Administrator on 2021/2/11 10:14 description:
  */
-class MyH264Player implements Runnable {
+class MyH264Player2 implements Runnable {
 
   String path;
-  Surface surface;
+  ImageView imageView;
   MediaCodec mediaCodec;
-  Context context;
+  Activity activity;
+  int i = 0;
 
-  public MyH264Player(Context context, String path, Surface surface) {
+  public MyH264Player2(Activity activity, String path, ImageView imageView) {
     this.path = path;
-    this.surface = surface;
-    this.context = context;
+    this.imageView = imageView;
+    this.activity = activity;
     try {
       mediaCodec = MediaCodec.createDecoderByType("video/hevc");
-      MediaFormat mediaFormat = MediaFormat.createVideoFormat("video/hevc", 368, 384);
+      MediaFormat mediaFormat = MediaFormat.createVideoFormat("video/hevc", 192, 96);
       mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
       //编辑的时候 生成  --> surface
-      mediaCodec.configure(mediaFormat, surface, null, 0);
+      mediaCodec.configure(mediaFormat, null, null, 0);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -69,7 +77,7 @@ class MyH264Player implements Runnable {
       if (startIndex >= totalSize) {
         break;
       }
-      nextFrameStart = findByFrame(bytes, startIndex );
+      nextFrameStart = findByFrame(bytes, startIndex + 2);
       int inIndex = mediaCodec.dequeueInputBuffer(10000);
       if (inIndex >= 0) {
         ByteBuffer byteBuffer = inputBuffers[inIndex];
@@ -88,11 +96,29 @@ class MyH264Player implements Runnable {
       if (outIndex >= 0) {
         try {
           // 音视频同步  ---> 33ms  =  解码时间 +  渲染时间 + 等待时间
-          Thread.sleep(33);
+          Thread.sleep(11);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
-        mediaCodec.releaseOutputBuffer(outIndex, true);
+        // byteBuffer dsp芯片  数据取出来  放到另一个容器
+        ByteBuffer byteBuffer = mediaCodec.getOutputBuffer(outIndex);
+        byteBuffer.limit(bufferInfo.size);
+        // converting byteBuffer to byte array
+        byte[] ba = new byte[byteBuffer.remaining()];
+        // 将byteBuffer的数据丢给byte[]
+        byteBuffer.get(ba);
+        YuvImage yuvImage = new YuvImage(ba, ImageFormat.NV21, 1920, 960, null);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        yuvImage.compressToJpeg(new Rect(0, 0, 1920, 960), 100, baos);
+        byte[] jdata = baos.toByteArray();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
+        if (bitmap != null) {
+          if (i % 3 == 0) {
+            activity.runOnUiThread(() -> imageView.setImageBitmap(bitmap));
+          }
+          i++;
+        }
+        mediaCodec.releaseOutputBuffer(outIndex, false);
       } else {
         Log.e("test", "解码失败");
       }
