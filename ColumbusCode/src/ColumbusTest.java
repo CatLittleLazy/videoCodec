@@ -9,7 +9,7 @@ class ColumbusTest {
 
   static int nStartBit = 0;
 
-  public static void main(String[] args) {
+  public static void main1(String[] args) {
 
     byte[] h264 = hexStringToByteArray(
         "00 00 00 01 67 64 00 15 AC D9 41 70 C6 84 00 00 03 00 04 00 00 03 00 F0 3C 58 B6 58".replace(
@@ -71,6 +71,16 @@ class ColumbusTest {
       int height = (pic_height_in_map_units_minus1 + 1) * 16;
       System.out.println("width :  " + width + "   height: " + height);
     }
+  }
+
+  public static void main(String[] args) {
+
+    //新增vps，且宏块类型由32增加值64，之前5位，现在6位
+    byte[] h265 = hexStringToByteArray(
+        "00 00 00 01 67 64 00 15 AC D9 41 70 C6 84 00 00 03 00 04 00 00 03 00 F0 3C 58 B6 58".replace(
+            " ", ""));
+    nStartBit = 4 * 8;
+
   }
 
   public static byte[] hexStringToByteArray(String s) {
