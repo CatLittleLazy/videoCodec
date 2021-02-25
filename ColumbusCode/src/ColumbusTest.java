@@ -9,11 +9,12 @@ class ColumbusTest {
 
   static int nStartBit = 0;
 
-  public static void main1(String[] args) {
+  public static void main(String[] args) {
 
     byte[] h264 = hexStringToByteArray(
-        "00 00 00 01 67 64 00 15 AC D9 41 70 C6 84 00 00 03 00 04 00 00 03 00 F0 3C 58 B6 58".replace(
-            " ", ""));
+        "00 00 00 01 67 42 80 0A DA 02 20 79 EF 80 6D 0A 13 50 00 00 00 01 68 CE 06 F2 0A 00 00 00 01 67 42 80 0A DA 02 20 79 EF 80 6D 0A 13 50 00 00 00 01 68 CE 06 F2 00 00 00 01 65 B8 43 7F FF FC 3C 24 50 00 10 81 BB C9 C9 F8 7F FE 08 A2 80 00 80 05 56 38 00 08 3C 47 00"
+            .replace(
+                " ", ""));
     nStartBit = 4 * 8;
     int forbidden_zero_bit = u(1, h264);
     int nal_ref_idc = u(2, h264);
@@ -73,14 +74,20 @@ class ColumbusTest {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main1(String[] args) {
 
     //新增vps，且宏块类型由32增加值64，之前5位，现在6位
     byte[] h265 = hexStringToByteArray(
-        "00 00 00 01 67 64 00 15 AC D9 41 70 C6 84 00 00 03 00 04 00 00 03 00 F0 3C 58 B6 58".replace(
-            " ", ""));
-    nStartBit = 4 * 8;
-
+        "42 01 01 01 60 00 00 03 00 B0 00 00 03 00 00 03 00 1E A0 02 20 80 1E 07 2F 96 BB 93 24 BA 80 2E D0 A1 28"
+            .replace(
+                " ", ""));
+    nStartBit = 148; // ---> 18 * 8 + 4 = 148 位
+    System.out.println("======");// 宏块数
+    int width = Ue(h265);
+    int height = Ue(h265);
+    System.out.println("width :  " + width + "   height: " + height);
+    //存疑 1080 -> 1920，解码出宽高位1088->1920；使用vlc打开发现还有一个缓冲分辨率 1088 x 1920：视频分辨率位1080 x 1920；目前估计跟16倍数有关
+    //存疑 录制视频时 奇数分辨率会出现crash
   }
 
   public static byte[] hexStringToByteArray(String s) {
