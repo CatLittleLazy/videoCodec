@@ -88,6 +88,147 @@ class ColumbusTest {
     System.out.println("width :  " + width + "   height: " + height);
     //存疑 1080 -> 1920，解码出宽高位1088->1920；使用vlc打开发现还有一个缓冲分辨率 1088 x 1920：视频分辨率位1080 x 1920；目前估计跟16倍数有关
     //存疑 录制视频时 奇数分辨率会出现crash
+    // 在media_codecs_google_video.xml中的encoder节点中会有对应编码器的最大支持分辨率，此处以pixel4a为例
+    //MIMETYPE_VIDEO_VP8 = "video/x-vnd.on2.vp8";  √
+    /*
+    <MediaCodec name="OMX.google.vp8.encoder" type="video/x-vnd.on2.vp8">
+            <!-- profiles and levels:  ProfileMain : Level_Version0-3 -->
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <!-- 2016 devices can encode at about 10fps at this block count -->
+            <Limit name="block-count" range="1-16384" />
+            <Limit name="bitrate" range="1-40000000" />
+            <Feature name="bitrate-modes" value="VBR,CBR" />
+        </MediaCodec>
+     */
+
+    //MIMETYPE_VIDEO_VP9 = "video/x-vnd.on2.vp9";  √
+    /*
+    <MediaCodec name="OMX.google.vp9.encoder" type="video/x-vnd.on2.vp9">
+            <!-- profiles and levels:  ProfileMain : Level_Version0-3 -->
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <!-- 2016 devices can encode at about 8fps at this block count -->
+            <Limit name="block-count" range="1-3600" /> <!-- max 1280x720 -->
+            <Limit name="bitrate" range="1-40000000" />
+            <Feature name="bitrate-modes" value="VBR,CBR" />
+        </MediaCodec>
+     */
+
+    //MIMETYPE_VIDEO_AVC = "video/avc";            √
+    /*
+    <MediaCodec name="OMX.google.h264.encoder" type="video/avc">
+            <!-- profiles and levels:  ProfileBaseline : Level41 -->
+            <Limit name="size" min="16x16" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="block-count" range="1-8192" /> <!-- max 2048x1024 -->
+            <Limit name="blocks-per-second" range="1-245760" />
+            <Limit name="bitrate" range="1-12000000" />
+            <Feature name="intra-refresh" />
+        </MediaCodec>
+     */
+
+    //MIMETYPE_VIDEO_MPEG4 = "video/mp4v-es";    176 x 144 √
+    /*
+    <MediaCodec name="OMX.google.mpeg4.encoder" type="video/mp4v-es">
+            <!-- profiles and levels:  ProfileCore : Level2 -->
+            <Limit name="size" min="16x16" max="176x144" />
+            <Limit name="alignment" value="16x16" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="12-1485" />
+            <Limit name="bitrate" range="1-64000" />
+        </MediaCodec>
+     */
+
+    /*MIMETYPE_VIDEO_H263 = "video/3gpp";
+    <MediaCodec name="OMX.google.h263.encoder" type="video/3gpp">
+            <!-- profiles and levels:  ProfileBaseline : Level45 -->
+            <Limit name="size" min="176x144" max="176x144" />
+            <Limit name="alignment" value="16x16" />
+            <Limit name="bitrate" range="1-128000" />
+        </MediaCodec>
+     */
+
+    //在media_codecs_omx.xml中定义了如下编码器，需要注意
+    // TODO: 2021/2/27  Non-Secure encoder  /  Secure encoder，应该是与一些参数的最大值有关
+    // 对比vp8，发现min 与 max都变大了
+    
+    /*
+    SM6150 Non-Secure encoder capabilities (Secure not supported)
+ ______________________________________________________
+ | Codec    | W       H       fps     Mbps    MB/s    |
+ |__________|_________________________________________|
+ | h264     | 4096    2160    24      100     829440  |
+ | hevc     | 4096    2160    24      100     829440  |
+ | vp8      | 3840    2160    30      100     972000  |
+ |__________|_________________________________________|
+     */
+
+    // 同时规定了buffer通道为11个
+    /*
+    <Settings>
+        <Setting name="max-video-encoder-input-buffers" value="11" />
+    </Settings>
+     */
+    //MIMETYPE_VIDEO_HEVC = "video/hevc";          √
+    /*
+    <MediaCodec name="OMX.qcom.video.encoder.hevc" type="video/hevc" >
+            <Quirk name="requires-allocate-on-input-ports" />
+            <Quirk name="requires-allocate-on-output-ports" />
+            <Quirk name="requires-loaded-to-idle-after-allocation" />
+            <Limit name="size" min="96x96" max="4096x2160" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" min="36" max="979200" />
+            <Limit name="bitrate" range="1-100000000" />
+            <Limit name="frame-rate" range="1-240" />
+            <Limit name="concurrent-instances" max="16" />
+            <Limit name="quality" range="0-100" default="80" />
+            <Limit name="performance-point-4096x2160" value="24" />
+            <Limit name="performance-point-3840x2160" value="30" />
+            <Limit name="performance-point-1920x1080" value="120" />
+            <Limit name="performance-point-1280x720" value="240" />
+            <Feature name="bitrate-modes" value="VBR,CBR" />
+        </MediaCodec>
+     */
+
+    //以下为未在xml中出现的编码器
+    //MIMETYPE_VIDEO_MPEG2 = "video/mpeg2";
+    //MIMETYPE_VIDEO_RAW = "video/raw";
+    //MIMETYPE_VIDEO_DOLBY_VISION = "video/dolby-vision";
+    //MIMETYPE_VIDEO_SCRAMBLED = "video/scrambled";
+    /*
+      todo 个人感觉出现      he.videoenocde: Invalid ID 0x00000000.时为不支持该解码器，待查看系统代码验证
+      I/libc: SetHeapTaggingLevel: tag level set to 0
+      I/he.videoenocde: Late-enabling -Xcheck:jni
+      I/he.videoenocde: Unquickening 12 vdex files!
+      D/ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+      D/NetworkSecurityConfig: No Network Security Config specified, using platform default
+      D/NetworkSecurityConfig: No Network Security Config specified, using platform default
+      E/he.videoenocde: Invalid ID 0x00000000.
+      W/he.videoenocde: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (greylist, reflection, allowed)
+      W/he.videoenocde: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (greylist, reflection, allowed)
+      I/AdrenoGLES-0: QUALCOMM build                   : 0905e9f, Ia11ce2d146
+         Build Date                       : 09/02/20
+         OpenGL ES Shader Compiler Version: EV031.31.04.00
+         Local Branch                     : gfx-adreno.lnx.2.0
+         Remote Branch                    :
+         Remote Branch                    :
+         Reconstruct Branch               :
+      I/AdrenoGLES-0: Build Config                     : S P 10.0.4 AArch64
+      I/AdrenoGLES-0: Driver Path                      : /vendor/lib64/egl/libGLESv2_adreno.so
+      I/AdrenoGLES-0: PFP: 0x016ee189, ME: 0x00000000
+      W/AdrenoUtils: <ReadGpuID_from_sysfs:197>: Failed to open /sys/class/kgsl/kgsl-3d0/gpu_model
+      W/AdrenoUtils: <ReadGpuID:221>: Failed to read chip ID from gpu_model. Fallback to use the GSL path
+      I/Gralloc4: mapper 4.x is not supported
+      W/MediaCodec-JNI: try to release MediaCodec from JMediaCodec::~JMediaCodec()...
+      W/MediaCodec-JNI: done releasing MediaCodec from JMediaCodec::~JMediaCodec().
+      D/AndroidRuntime: Shutting down VM
+     */
+
   }
 
   public static byte[] hexStringToByteArray(String s) {
