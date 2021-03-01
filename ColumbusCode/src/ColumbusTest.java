@@ -86,7 +86,8 @@ class ColumbusTest {
     int width = Ue(h265);
     int height = Ue(h265);
     System.out.println("width :  " + width + "   height: " + height);
-    //存疑 1080 -> 1920，解码出宽高位1088->1920；使用vlc打开发现还有一个缓冲分辨率 1088 x 1920：视频分辨率位1080 x 1920；目前估计跟16倍数有关
+    //todo 存疑 1080 -> 1920，解码出宽高位1088->1920；使用vlc打开发现还有一个缓冲分辨率 1088 x 1920：视频分辨率位1080 x 1920；
+    //todo 目前估计跟16倍数有关，已确定推测正确，部分手机中的配置文件会将1080写作1088
     //存疑 录制视频时 奇数分辨率会出现crash
     // 在media_codecs_google_video.xml中的encoder节点中会有对应编码器的最大支持分辨率，此处以pixel4a为例
     //MIMETYPE_VIDEO_VP8 = "video/x-vnd.on2.vp8";  √
@@ -201,7 +202,7 @@ class ColumbusTest {
     //MIMETYPE_VIDEO_DOLBY_VISION = "video/dolby-vision";
     //MIMETYPE_VIDEO_SCRAMBLED = "video/scrambled";
     /*
-      todo 个人感觉出现      he.videoenocde: Invalid ID 0x00000000.时为不支持该解码器，待查看系统代码验证
+      todo 个人感觉出现      he.videoenocde: Invalid ID 0x00000000.时为不支持该解码器，待查看系统代码验证---暂未有结论
       I/libc: SetHeapTaggingLevel: tag level set to 0
       I/he.videoenocde: Late-enabling -Xcheck:jni
       I/he.videoenocde: Unquickening 12 vdex files!
