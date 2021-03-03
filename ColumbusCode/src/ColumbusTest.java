@@ -7,6 +7,8 @@ import java.util.Arrays;
 
 class ColumbusTest {
 
+
+  // media_codecs_performance.xml部分作用会用于应用提升流畅度，主要针对于码流的处理
   static int nStartBit = 0;
 
   public static void main(String[] args) {
