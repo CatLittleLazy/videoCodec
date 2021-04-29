@@ -40,20 +40,25 @@ public class MainActivity extends AppCompatActivity {
     this.mediaProjectionManager =
         (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
     Intent captureIntent = mediaProjectionManager.createScreenCaptureIntent();
-    startActivityForResult(captureIntent, 100);
+    findViewById(R.id.projection).setOnClickListener((view) -> {
+      startActivityForResult(captureIntent, 100);
+    });
+    findViewById(R.id.testRecorderMPEG2TS).setOnClickListener((view) -> {
+      startActivity(new Intent(MainActivity.this, CtsRecoderMpeg2Ts.class));
+    });
   }
 
   private void initMediaCodec() {
     try {
-      mediaCodec = MediaCodec.createEncoderByType("video/avc");
+      mediaCodec = MediaCodec.createEncoderByType("video/scrambled");
       MediaFormat mediaFormat =
-          MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, 540, 960);
+          MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_SCRAMBLED, 176, 144);
       mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
       //2秒中1个I帧
       mediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 2);
       mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT,
           MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-      mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1200_000);
+      mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 400_000);
       mediaCodec.configure(mediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
       Surface surface = mediaCodec.createInputSurface();
       new Thread(() -> {
@@ -134,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     FileOutputStream fileOutputStream = null;
     try {
       fileOutputStream =
-          new FileOutputStream(Environment.getExternalStorageDirectory() + "/codec.h264", true);
+          new FileOutputStream(Environment.getExternalStorageDirectory() + "/3gpp.h263", true);
       fileOutputStream.write(array);
       fileOutputStream.write('\n');
     } catch (IOException e) {
