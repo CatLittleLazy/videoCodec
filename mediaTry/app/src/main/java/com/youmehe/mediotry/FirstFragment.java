@@ -34,7 +34,7 @@ public class FirstFragment extends Fragment {
       }
     });
     initSurface(view.findViewById(R.id.surface));
-    //showVideoImage(view.findViewById(R.id.image));
+    showVideoImage(view.findViewById(R.id.image));
   }
 
   public void showVideoImage(ImageView imageView) {

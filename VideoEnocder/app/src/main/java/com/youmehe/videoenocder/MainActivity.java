@@ -46,11 +46,15 @@ public class MainActivity extends AppCompatActivity {
     findViewById(R.id.testRecorderMPEG2TS).setOnClickListener((view) -> {
       startActivity(new Intent(MainActivity.this, CtsRecoderMpeg2Ts.class));
     });
+
+    findViewById(R.id.getThePhoneMediaCodec).setOnClickListener((view) -> {
+      startActivity(new Intent(MainActivity.this, MediaCodecActivity.class));
+    });
   }
 
   private void initMediaCodec() {
     try {
-      mediaCodec = MediaCodec.createEncoderByType("video/scrambled");
+      mediaCodec = MediaCodec.createEncoderByType("video/avc");
       MediaFormat mediaFormat =
           MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_SCRAMBLED, 176, 144);
       mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);

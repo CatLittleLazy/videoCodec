@@ -165,6 +165,7 @@ public class CtsRecoderMpeg2Ts extends AppCompatActivity {
     }
 
     mMediaRecorder.stop();
+    Log.e(TAG, "stop");
     //checkOutputExist();
   }
 }
