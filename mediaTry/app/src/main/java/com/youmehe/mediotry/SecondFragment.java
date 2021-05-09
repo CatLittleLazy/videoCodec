@@ -60,6 +60,7 @@ public class SecondFragment extends Fragment {
       //set media source
       mMediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(),
           assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
+      //before start we should call prepare
       mMediaPlayer.prepare();
       mMediaPlayer.start();
     } catch (IOException e) {
