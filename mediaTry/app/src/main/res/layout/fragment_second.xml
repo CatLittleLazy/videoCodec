@@ -10,11 +10,21 @@
       android:id="@+id/playAudioFromRaw"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/fromraw"
+      android:text="@string/from_raw"
       app:layout_constraintBottom_toTopOf="@id/previous"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+
+  <Button
+      android:id="@+id/playAudioFromAssets"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/from_assets"
+      app:layout_constraintBottom_toTopOf="@id/previous"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/playAudioFromRaw" />
 
   <Button
       android:id="@+id/previous"
