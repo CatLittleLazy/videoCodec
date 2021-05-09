@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">VideoEnocder</string>
   <string name="getthephonemediacodec">getThePhoneMediaCodec</string>
+  <string name="playmp3">playMp3</string>
 </resources>

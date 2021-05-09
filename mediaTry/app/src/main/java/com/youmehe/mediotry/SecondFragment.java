@@ -1,5 +1,6 @@
 package com.youmehe.mediotry;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,16 @@ public class SecondFragment extends Fragment {
   public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        NavHostFragment.findNavController(SecondFragment.this)
-            .navigate(R.id.action_SecondFragment_to_FirstFragment);
-      }
-    });
+    view.findViewById(R.id.previous)
+        .setOnClickListener(view1 -> NavHostFragment.findNavController(SecondFragment.this)
+            .navigate(R.id.action_SecondFragment_to_FirstFragment));
+
+    view.findViewById(R.id.playAudioFromRaw)
+        .setOnClickListener(view2 -> playMusicFromRaw(R.raw.test));
+  }
+
+  private void playMusicFromRaw(int resId) {
+    // this way should not call prepare before start
+    MediaPlayer.create(getActivity(), resId).start();
   }
 }
