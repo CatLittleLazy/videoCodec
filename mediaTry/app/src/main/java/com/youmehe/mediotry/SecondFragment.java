@@ -33,9 +33,11 @@ public class SecondFragment extends Fragment {
 
     view.findViewById(R.id.previous)
         .setOnClickListener(view1 -> {
+          if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+          }
           NavHostFragment.findNavController(SecondFragment.this)
               .navigate(R.id.action_SecondFragment_to_FirstFragment);
-          mMediaPlayer.release();
         });
 
     view.findViewById(R.id.playAudioFromRaw)

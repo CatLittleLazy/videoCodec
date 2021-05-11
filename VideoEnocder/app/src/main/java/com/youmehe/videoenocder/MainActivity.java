@@ -52,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
     findViewById(R.id.testRecorderMPEG2TS).setOnClickListener((view) -> {
       startActivity(new Intent(MainActivity.this, CtsRecoderMpeg2Ts.class));
     });
-
-    findViewById(R.id.getThePhoneMediaCodec).setOnClickListener((view) -> {
-      startActivity(new Intent(MainActivity.this, MediaCodecActivity.class));
-    });
   }
 
   private void initMediaCodec() {

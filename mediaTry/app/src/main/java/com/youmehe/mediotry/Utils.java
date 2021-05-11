@@ -1,27 +1,20 @@
-package com.youmehe.videoenocder;
+package com.youmehe.mediotry;
 
-import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.util.Log;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MediaCodecActivity extends AppCompatActivity {
+/**
+ * Created by youmehe on 5/12/21 12:01 AM description:
+ */
 
-  public static String TAG = "MediaCodecActivity";
+class Utils {
+  public static String TAG = "Utils";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_media_codec);
-    getAllCodec(MediaCodecList.REGULAR_CODECS);
-  }
-
-  public void getAllCodec(int kind) {
+  public static List<String> getAllCodec(int kind) {
     MediaCodecList mediaCodecList = new MediaCodecList(kind);
     MediaCodecInfo[] allCodecs = mediaCodecList.getCodecInfos();
     // allCodecswill not be null and foreach will check length auto
@@ -42,17 +35,15 @@ public class MediaCodecActivity extends AppCompatActivity {
         deCodec++;
       }
     }
-    Log.i(TAG, "Your phone have "
-        + allCodecs.length
-        + " codecs = enCodec ("
-        + enCodec
-        + ") + "
-        + "deCodec ("
-        + deCodec
-        + "), and support "
-        + supportTypes.size()
-        + " types as below \n"
-        + Arrays.toString(
-        new List[] {supportTypes}));
+    String type = kind == 0 ? "REGULAR_CODECS" : "ALL_CODECS";
+    String totalInfo =
+        "kind == " + type + "\nYour phone have " + allCodecs.length + " codecs = enCodec ("
+            + enCodec + ") + " + "deCodec (" + deCodec + "), and support " + supportTypes.size()
+            + " types as below\n";
+    //+ Arrays.toString(
+    //new List[] {supportTypes});
+    Log.i(TAG, totalInfo);
+    supportTypes.add(0, totalInfo);
+    return supportTypes;
   }
 }

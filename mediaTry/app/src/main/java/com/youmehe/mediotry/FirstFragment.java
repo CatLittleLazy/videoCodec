@@ -29,6 +29,11 @@ public class FirstFragment extends Fragment {
     view.findViewById(R.id.playAudio)
         .setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
             .navigate(R.id.action_FirstFragment_to_SecondFragment));
+
+    view.findViewById(R.id.mediaCodec)
+        .setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
+            .navigate(R.id.action_FirstFragment_to_ThirdFragment));
+
     //initSurface(view.findViewById(R.id.surface));
     //showVideoImage(view.findViewById(R.id.image));
   }
