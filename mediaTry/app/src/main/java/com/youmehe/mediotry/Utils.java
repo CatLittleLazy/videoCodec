@@ -46,4 +46,32 @@ class Utils {
     supportTypes.add(0, totalInfo);
     return supportTypes;
   }
+
+  public static List<Object> getAllCodecInfo(int kind) {
+    MediaCodecList mediaCodecList = new MediaCodecList(kind);
+    MediaCodecInfo[] allCodecs = mediaCodecList.getCodecInfos();
+    // allCodecswill not be null and foreach will check length auto
+    int enCodec = 0;
+    int deCodec = 0;
+    List<Object> result = new ArrayList<>();
+    for (MediaCodecInfo mediaCodecInfo : mediaCodecList.getCodecInfos()) {
+      if (mediaCodecInfo.isAlias()) {
+        continue;
+      }
+      result.add(mediaCodecInfo);
+      Log.e(TAG, mediaCodecInfo.getName());
+      Log.e(TAG, Arrays.toString(mediaCodecInfo.getSupportedTypes()));
+      if (mediaCodecInfo.isEncoder()) {
+        enCodec++;
+      } else {
+        deCodec++;
+      }
+    }
+    String type = kind == 0 ? "REGULAR_CODECS" : "ALL_CODECS";
+    String totalInfo =
+        "kind == " + type + "\nYour phone have " + result.size() + " codecs = enCodec (" + enCodec
+            + ") + " + "deCodec (" + deCodec + ")\n";
+    result.add(0, totalInfo);
+    return result;
+  }
 }

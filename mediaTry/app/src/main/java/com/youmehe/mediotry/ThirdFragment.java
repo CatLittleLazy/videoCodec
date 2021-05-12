@@ -1,32 +1,21 @@
 package com.youmehe.mediotry;
 
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
-import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static com.youmehe.mediotry.Utils.getAllCodec;
+import static com.youmehe.mediotry.Utils.getAllCodecInfo;
 
 public class ThirdFragment extends Fragment {
 
   private static final String TAG = "ThirdFragment";
-  MediaPlayer mMediaPlayer;
   RecyclerView recyclerView;
 
   @Override
@@ -45,9 +34,9 @@ public class ThirdFragment extends Fragment {
               .navigate(R.id.action_ThirdFragment_to_FirstFragment);
         });
     recyclerView = view.findViewById(R.id.recycler);
-    codecAdapter codecAdapter =
-        new codecAdapter(getActivity(), getAllCodec(MediaCodecList.ALL_CODECS));
+    codecInfoAdapter adapter =
+        new codecInfoAdapter(getActivity(), getAllCodecInfo(MediaCodecList.ALL_CODECS));
     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    recyclerView.setAdapter(codecAdapter);
+    recyclerView.setAdapter(adapter);
   }
 }
