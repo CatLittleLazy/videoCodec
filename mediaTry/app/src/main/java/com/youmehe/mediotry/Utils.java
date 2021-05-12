@@ -1,5 +1,6 @@
 package com.youmehe.mediotry;
 
+import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.util.Log;
@@ -58,14 +59,21 @@ class Utils {
       if (mediaCodecInfo.isAlias()) {
         continue;
       }
+
       result.add(mediaCodecInfo);
-      Log.e(TAG, mediaCodecInfo.getName());
-      Log.e(TAG, Arrays.toString(mediaCodecInfo.getSupportedTypes()));
+      Log.e(TAG, "name -> " + mediaCodecInfo.getName());
+      Log.e(TAG, "isSoftwareOnly -> " + mediaCodecInfo.isSoftwareOnly());
+      Log.e(TAG, "isHardwareAccelerated -> " + mediaCodecInfo.isHardwareAccelerated());
+      Log.e(TAG, "isVendor -> " + mediaCodecInfo.isVendor());
+      Log.e(TAG, "supported types -> " + Arrays.toString(mediaCodecInfo.getSupportedTypes()));
       if (mediaCodecInfo.isEncoder()) {
         enCodec++;
       } else {
         deCodec++;
       }
+      logLine(TAG);
+      MediaCodecInfo.VideoCapabilities.PerformancePoint p = getSupportedPerformancePoints();
+      mediaCodecInfo.getCapabilitiesForType()
     }
     String type = kind == 0 ? "REGULAR_CODECS" : "ALL_CODECS";
     String totalInfo =
@@ -73,5 +81,32 @@ class Utils {
             + ") + " + "deCodec (" + deCodec + ")\n";
     result.add(0, totalInfo);
     return result;
+  }
+
+  //from cts CodecPerformanceTestBase.java
+  int getMaxOperatingRate(String codecName, String mime) throws Exception {
+    MediaCodec codec = MediaCodec.createByCodecName(codecName);
+    MediaCodecInfo mediaCodecInfo = codec.getCodecInfo();
+    List<MediaCodecInfo.VideoCapabilities.PerformancePoint> pps = mediaCodecInfo
+        .getCapabilitiesForType(mime).getVideoCapabilities()
+        .getSupportedPerformancePoints();
+    assertTrue(pps.size() > 0);
+    MediaCodecInfo.VideoCapabilities.PerformancePoint cpp =
+        new MediaCodecInfo.VideoCapabilities.PerformancePoint(mWidth, mHeight, mFrameRate);
+    int macroblocks = cpp.getMaxMacroBlocks();
+    int maxOperatingRate = -1;
+    for (MediaCodecInfo.VideoCapabilities.PerformancePoint pp : pps) {
+      if (pp.covers(cpp)) {
+        maxOperatingRate = Math.max(Math.min(pp.getMaxFrameRate(),
+            (int) pp.getMaxMacroBlockRate() / macroblocks), maxOperatingRate);
+      }
+    }
+    codec.release();
+    assertTrue(maxOperatingRate != -1);
+    return maxOperatingRate;
+  }
+
+  public static void logLine(String tag) {
+    Log.e(tag, "-------------------------------------------------------");
   }
 }
