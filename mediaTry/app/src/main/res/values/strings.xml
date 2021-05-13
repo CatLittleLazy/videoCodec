@@ -12,4 +12,5 @@
   <string name="from_raw">fromRaw</string>
   <string name="from_assets">fromAssets</string>
   <string name="mediaCodec">mediaCodec</string>
+  <string name="videoCapabilities">videoCapabilities</string>
 </resources>

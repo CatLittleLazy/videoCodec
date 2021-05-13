@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +67,11 @@ class codecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
               codecAdapter codecAdapter =
                   (com.youmehe.mediotry.codecAdapter) ((RecyclerView) itemView.getParent()).getAdapter();
               if (codecAdapter != null) {
-                codecAdapter.setSupportCodec(getAllCodec(type));
+                try {
+                  codecAdapter.setSupportCodec(getAllCodec(type));
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
                 codecAdapter.notifyDataSetChanged();
               }
             }

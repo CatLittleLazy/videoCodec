@@ -4,6 +4,7 @@ import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.util.Log;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,27 +16,43 @@ import java.util.List;
 class Utils {
   public static String TAG = "Utils";
 
-  public static List<String> getAllCodec(int kind) {
+  public static List<String> getAllCodec(int kind) throws IOException {
     MediaCodecList mediaCodecList = new MediaCodecList(kind);
     MediaCodecInfo[] allCodecs = mediaCodecList.getCodecInfos();
+    MediaCodec mediaCodec = null;
     // allCodecswill not be null and foreach will check length auto
     int enCodec = 0;
     int deCodec = 0;
     List<String> supportTypes = new ArrayList<>();
     for (MediaCodecInfo mediaCodecInfo : mediaCodecList.getCodecInfos()) {
       Log.e(TAG, mediaCodecInfo.getName());
-      for (String type : mediaCodecInfo.getSupportedTypes()) {
-        if (!supportTypes.contains(type)) {
-          supportTypes.add(type);
-        }
-      }
-      Log.e(TAG, Arrays.toString(mediaCodecInfo.getSupportedTypes()));
       if (mediaCodecInfo.isEncoder()) {
         enCodec++;
       } else {
         deCodec++;
       }
+      for (String type : mediaCodecInfo.getSupportedTypes()) {
+        if (!supportTypes.contains(type)) {
+          Log.e(TAG, type + "_" + type.contains("video"));
+          if (type.contains("video")) {
+            if (mediaCodecInfo.isEncoder()) {
+              mediaCodec = MediaCodec.createEncoderByType(type);
+            } else {
+              mediaCodec = MediaCodec.createDecoderByType(type);
+            }
+            List<MediaCodecInfo.VideoCapabilities.PerformancePoint> pps = mediaCodec.getCodecInfo()
+                .getCapabilitiesForType(type).getVideoCapabilities()
+                .getSupportedPerformancePoints();
+            if (pps != null) {
+              Log.e(TAG, "?--" + Arrays.toString(pps.toArray()));
+            }
+          }
+          supportTypes.add(type);
+        }
+      }
+      Log.e(TAG, Arrays.toString(mediaCodecInfo.getSupportedTypes()));
     }
+
     String type = kind == 0 ? "REGULAR_CODECS" : "ALL_CODECS";
     String totalInfo =
         "kind == " + type + "\nYour phone have " + allCodecs.length + " codecs = enCodec ("
@@ -72,8 +89,6 @@ class Utils {
         deCodec++;
       }
       logLine(TAG);
-      MediaCodecInfo.VideoCapabilities.PerformancePoint p = getSupportedPerformancePoints();
-      mediaCodecInfo.getCapabilitiesForType()
     }
     String type = kind == 0 ? "REGULAR_CODECS" : "ALL_CODECS";
     String totalInfo =
@@ -83,28 +98,33 @@ class Utils {
     return result;
   }
 
-  //from cts CodecPerformanceTestBase.java
-  int getMaxOperatingRate(String codecName, String mime) throws Exception {
-    MediaCodec codec = MediaCodec.createByCodecName(codecName);
+  public static void getVideoCapabilitiesTest(MediaCodec codec) {
+    //MediaFormat mediaFormat = MediaFormat.createVideoFormat("video/x-vnd.on2.vp9", 3840, 2160);
+    //mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 1);
     MediaCodecInfo mediaCodecInfo = codec.getCodecInfo();
+
     List<MediaCodecInfo.VideoCapabilities.PerformancePoint> pps = mediaCodecInfo
-        .getCapabilitiesForType(mime).getVideoCapabilities()
+        .getCapabilitiesForType("video/x").getVideoCapabilities()
         .getSupportedPerformancePoints();
-    assertTrue(pps.size() > 0);
-    MediaCodecInfo.VideoCapabilities.PerformancePoint cpp =
-        new MediaCodecInfo.VideoCapabilities.PerformancePoint(mWidth, mHeight, mFrameRate);
-    int macroblocks = cpp.getMaxMacroBlocks();
-    int maxOperatingRate = -1;
-    for (MediaCodecInfo.VideoCapabilities.PerformancePoint pp : pps) {
-      if (pp.covers(cpp)) {
-        maxOperatingRate = Math.max(Math.min(pp.getMaxFrameRate(),
-            (int) pp.getMaxMacroBlockRate() / macroblocks), maxOperatingRate);
-      }
-    }
-    codec.release();
-    assertTrue(maxOperatingRate != -1);
-    return maxOperatingRate;
+    Log.e(TAG, "?--" + Arrays.toString(pps.toArray()));
   }
+
+  /**
+   * //from cts CodecPerformanceTestBase.java public static int getMaxOperatingRate(String
+   * codecName, String mime, int width, int height, int frameRate) throws Exception { MediaCodec
+   * codec = MediaCodec.createByCodecName(codecName); MediaCodecInfo mediaCodecInfo =
+   * codec.getCodecInfo(); List<MediaCodecInfo.VideoCapabilities.PerformancePoint> pps =
+   * mediaCodecInfo .getCapabilitiesForType(mime).getVideoCapabilities()
+   * .getSupportedPerformancePoints(); if (pps.size() <= 0) { return 0; }
+   * MediaCodecInfo.VideoCapabilities.PerformancePoint cpp = new MediaCodecInfo.VideoCapabilities.PerformancePoint(width,
+   * height, frameRate);
+   * <p>
+   * //int macroblocks = cpp.getMaxMacroBlocks(); //int maxOperatingRate = -1; //for
+   * (MediaCodecInfo.VideoCapabilities.PerformancePoint pp : pps) { //  if (pp.covers(cpp)) { //
+   * maxOperatingRate = Math.max(Math.min(pp.getMaxFrameRate(), //        (int)
+   * pp.getMaxMacroBlockRate() / macroblocks), maxOperatingRate); //  } //} //codec.release();
+   * //assertTrue(maxOperatingRate != -1); return -1; }
+   */
 
   public static void logLine(String tag) {
     Log.e(tag, "-------------------------------------------------------");
