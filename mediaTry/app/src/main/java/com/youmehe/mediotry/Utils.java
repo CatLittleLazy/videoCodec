@@ -5,9 +5,14 @@ import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.util.Log;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.media.MediaCodecInfo.VideoCapabilities.PerformancePoint.UHD_50;
+import static android.media.MediaCodecInfo.VideoCapabilities.PerformancePoint.UHD_60;
 
 /**
  * Created by youmehe on 5/12/21 12:01 AM description:
@@ -45,6 +50,17 @@ class Utils {
                 .getSupportedPerformancePoints();
             if (pps != null) {
               Log.e(TAG, "?--" + Arrays.toString(pps.toArray()));
+              for (MediaCodecInfo.VideoCapabilities.PerformancePoint cpp : pps) {
+                //this is a testApi,we can not use;use reflect can not get also
+                Object obj = cpp.getClass();
+                try {
+                  Method method = ((Class<?>) obj).getMethod("toString");
+                  String m = (String) method.invoke(cpp);
+                  Log.e(TAG, "?-----------------------" + m);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                  e.printStackTrace();
+                }
+              }
             }
           }
           supportTypes.add(type);
