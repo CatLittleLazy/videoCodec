@@ -2,6 +2,17 @@
 
 
 #### MediaCodecInfo.java
+- resolution description
+480p 576p 被称为度SD(Standard Definition)（标清）
+  
+720p 被称为HD(High Definition)（高清）
+  
+1080p 被称为FHD(Full High Definition)（全高清）
+  
+4k 被称为UHD(Ultra High Definition)(超高答清)(或 4k UHD)
+  
+8k 被称为FUHD(Full Ultra High Definition)(8k超高清)(或 8k UHD)
+
 - SD--->
 /** 480p 24fps */
 public static final PerformancePoint SD_24 = new PerformancePoint(720, 480, 24);

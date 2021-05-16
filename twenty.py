@@ -19,6 +19,17 @@ import time
 import tkinter as tk
 import threading
 
+#设置黑屏时间50s
+REST_TIME = 50
+
+#设置工作时间in
+WORK_TIME = 20 * 60
+
+#退出程序
+def close(event):
+    print('----close---')
+    exit()
+
 # flag: 1:倒计时界面 非1:黑屏界面
 def main(flag):
 	if flag == 1:
@@ -56,7 +67,9 @@ def main(flag):
 		l1_2 = tk.Label(window1, text = 1200, font = ('宋体', 11))
 		# 获取创建时间，在其基础上增加1200即为20分钟后的时间
 		global create_now
-		create_now = time.time() + 1200
+		create_now = time.time() + WORK_TIME
+		#击后自动退出
+		l1_2.bind("<Button-1>",close)
 		# 开启倒计时
 		time_now()
 		window1.mainloop()
@@ -71,14 +84,16 @@ def main(flag):
 
 		window2 = tk.Tk()
 		window2.title('20 20 20')
+		window2.bind("<Button-1>",close)
 		window2.overrideredirect(True)
 		width = window2.winfo_screenwidth()+100
 		height = window2.winfo_screenheight()+100
 		resolution = str(width)+'x'+str(height)
 		window2.geometry(resolution)
 		window2['bg'] = 'black'
-		window2.wm_attributes('-topmost',1)
-		create_now = time.time() + 50
+		widow2.wm_attributes('-topmost',1)
+		#设置黑屏时间50s
+		create_now = time.time() + REST_TIME
 		time_now()
 		print('--------->')
 		window2.mainloop()
