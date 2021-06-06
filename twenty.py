@@ -37,6 +37,9 @@ SCRN_2_Y = 768
 # 高度
 LINE_HEIGHT = 1
 
+# 时间线颜色(rgb)
+LINE_COLOR = "#a9a9a9"
+
 # 设置每秒钟宽度变化
 PIXEL_PER_SEC = SCRN_X / WORK_TIME
 
@@ -44,6 +47,12 @@ PIXEL_PER_SEC = SCRN_X / WORK_TIME
 def close(event):
     print('----close---')
     exit()
+
+# 根据剩余时间计算时间线位置
+def time_line_show_position(time_dec):
+			newWidth = int(PIXEL_PER_SEC * time_dec)
+			# time_dec == 0; return 1920 x 1 + 0 + 1079
+			return str(newWidth)+'x'+str(LINE_HEIGHT)+'+'+str(SCRN_X - newWidth)+'+'+str(SCRN_Y - LINE_HEIGHT)
 
 # flag: 1:倒计时界面 非1:黑屏界面
 def main(flag):
@@ -63,11 +72,6 @@ def main(flag):
 			# 每100毫秒后调用一次自身
 			window1.after(100, time_now)
 
-		def time_line_show_position(time_dec):
-			newWidth = int(PIXEL_PER_SEC * time_dec)
-			# time_dec == 0; return 1920 x 1 + 0 + 1079
-			return str(newWidth)+'x'+str(LINE_HEIGHT)+'+'+str(SCRN_X - newWidth)+'+'+str(SCRN_Y - LINE_HEIGHT)
-
 		window1 = tk.Tk()
 		window1.title('20 20 20')
 		window1.overrideredirect(True)
@@ -75,6 +79,8 @@ def main(flag):
 		window1.geometry(time_line_show_position(0))
 		# 窗口置顶显示
 		window1.wm_attributes('-topmost',1)
+		# 设置显示颜色
+		window1['bg'] = LINE_COLOR
 		# 获取创建时间，在其基础上增加1200即为20分钟后的时间
 		global create_now
 		create_now = time.time() + WORK_TIME
