@@ -16,14 +16,29 @@
 
 # 导入需要的包
 import time
+# 如果提示tkinter不存在，请确定python目录下存在tcl目录,
 import tkinter as tk
 import threading
 
-#设置黑屏时间50s
+# 设置黑屏时间50s
 REST_TIME = 50
 
-#设置工作时间in
+# 设置工作时间1200s
 WORK_TIME = 20 * 60
+
+# 主屏1920x1080
+SCRN_X = 1920
+SCRN_Y = 1080
+
+# 副屏
+SCRN_2_X = 1024
+SCRN_2_Y = 768
+
+# 高度
+LINE_HEIGHT = 1
+
+# 设置每秒钟宽度变化
+PIXEL_PER_SEC = SCRN_X / WORK_TIME
 
 #退出程序
 def close(event):
@@ -40,42 +55,31 @@ def main(flag):
 			seconds_now = time.time()
 			# 是否已经到了1200秒(20分钟)
 			if seconds_now > create_now:
-				# 关闭倒计时label
-				l1_2.destroy()
 				# 关闭倒计时window
 				window1.destroy()
 				return
-			# 设置倒计时时间(需要将小数转换为整数)
-			l1_2.configure(text = int(create_now)-int(seconds_now))
-			# 设置倒计时文字位置
-			l1_2.place(x = 0, y = 0)
-			# 每1000毫秒后调用一次自身
-			l1_2.after(1000, time_now)
-			l1_2['bg'] = 'black'
-			l1_2['fg'] = 'white'
+			window1.geometry(time_line_show_position(int(create_now) - int(seconds_now)))
+			window1.wm_attributes('-topmost',1)
+			# 每100毫秒后调用一次自身
+			window1.after(100, time_now)
 
+		def time_line_show_position(time_dec):
+			newWidth = int(PIXEL_PER_SEC * time_dec)
+			# time_dec == 0; return 1920 x 1 + 0 + 1079
+			return str(newWidth)+'x'+str(LINE_HEIGHT)+'+'+str(SCRN_X - newWidth)+'+'+str(SCRN_Y - LINE_HEIGHT)
 
 		window1 = tk.Tk()
 		window1.title('20 20 20')
 		window1.overrideredirect(True)
-		width = window1.winfo_screenwidth()+100
-		height = window1.winfo_screenheight()+100
-		# 设置窗口大小为200*25，位置为屏幕左下角
-		resolution = str(width)+'x'+str(height)+'+0+'+str(width-25)
-		print(resolution)
 		# 以如下内容确定显示位置
-		# 1920 = 40 + 1880; 1020 = 20 + 1060
-		window1.geometry('40x20+1880+1060')
+		window1.geometry(time_line_show_position(0))
 		# 窗口置顶显示
 		window1.wm_attributes('-topmost',1)
-		# 创建倒计时label
-		l1_2 = tk.Label(window1, text = 1200, font = ('宋体', 11))
 		# 获取创建时间，在其基础上增加1200即为20分钟后的时间
 		global create_now
 		create_now = time.time() + WORK_TIME
 		#击后自动退出
-		l1_2.bind("<Button-1>",close)
-		# 开启倒计时
+		window1.bind("<Button-1>",close)
 		time_now()
 		window1.mainloop()
 	else:
@@ -85,18 +89,15 @@ def main(flag):
 			if seconds_now > create_now:
 				window2.destroy()
 				return
-			window2.after(1000, time_now)
-
+			window2.after(100, time_now)
 		window2 = tk.Tk()
 		window2.title('20 20 20')
 		window2.bind("<Button-1>",close)
 		window2.overrideredirect(True)
-		width = window2.winfo_screenwidth()+100
-		height = window2.winfo_screenheight()+100
-		resolution = str(width)+'x'+str(height)
+		resolution = str(SCRN_X + SCRN_2_X)+'x'+str(SCRN_Y + SCRN_2_Y)
 		window2.geometry(resolution)
 		window2['bg'] = 'black'
-		widow2.wm_attributes('-topmost',1)
+		window2.wm_attributes('-topmost',1)
 		#设置黑屏时间50s
 		create_now = time.time() + REST_TIME
 		time_now()
@@ -107,3 +108,5 @@ if __name__ == '__main__':
 	while True:
 		main(1)
 		main(2)
+
+	
