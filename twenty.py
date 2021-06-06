@@ -51,6 +51,9 @@ def main(flag):
 			l1_2.place(x = 0, y = 0)
 			# 每1000毫秒后调用一次自身
 			l1_2.after(1000, time_now)
+			l1_2['bg'] = 'black'
+			l1_2['fg'] = 'white'
+
 
 		window1 = tk.Tk()
 		window1.title('20 20 20')
@@ -60,7 +63,9 @@ def main(flag):
 		# 设置窗口大小为200*25，位置为屏幕左下角
 		resolution = str(width)+'x'+str(height)+'+0+'+str(width-25)
 		print(resolution)
-		window1.geometry('40x25+0+1055')
+		# 以如下内容确定显示位置
+		# 1920 = 40 + 1880; 1020 = 20 + 1060
+		window1.geometry('40x20+1880+1060')
 		# 窗口置顶显示
 		window1.wm_attributes('-topmost',1)
 		# 创建倒计时label
