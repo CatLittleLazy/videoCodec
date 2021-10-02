@@ -49,5 +49,9 @@ https://www.nblogs.com/panjh/articles/13474169.html
 https://blog.csdn.net/justitia00/article/details/103945803?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link
 
 ### git push test
+Beginning August 13, 2021, we will no longer accept account passwords when authenticating Git operations on GitHub.com.
+
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection
+
 
 ### table chosse
