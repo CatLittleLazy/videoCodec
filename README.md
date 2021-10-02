@@ -11,7 +11,7 @@
 #### frameworks/av/media/libmedia/xsd/Android.bp
 + xsd中未对 maxHFRFrameWidth声明
 + cs.android.com中直接搜到了bengal的media_profiles.xml文件
-+ 目前来看文件内容一致 ht
++ 目前来看文件内容一致
 hardware/qcom/sm7250/media/conf_files/bengal/media_profiles.xml
 
 #### aosp in android studio
