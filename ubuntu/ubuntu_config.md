@@ -52,6 +52,3 @@ https://blog.csdn.net/justitia00/article/details/103945803?utm_medium=distribute
 Beginning August 13, 2021, we will no longer accept account passwords when authenticating Git operations on GitHub.com.
 
 https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection
-
-
-### table chosse
