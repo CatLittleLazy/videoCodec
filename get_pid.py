@@ -1,3 +1,4 @@
+#! /bin/bash
 import os
 from time import sleep
 import random
