@@ -1,4 +1,4 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
@@ -10,9 +10,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static android.media.MediaCodecInfo.VideoCapabilities.PerformancePoint.UHD_50;
-import static android.media.MediaCodecInfo.VideoCapabilities.PerformancePoint.UHD_60;
 
 /**
  * Created by youmehe on 5/12/21 12:01 AM description:

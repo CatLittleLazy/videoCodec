@@ -1,4 +1,4 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;

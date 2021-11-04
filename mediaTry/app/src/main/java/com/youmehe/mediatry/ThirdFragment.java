@@ -1,11 +1,7 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
-import android.media.MediaCodec;
-import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
-import android.media.MediaFormat;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +11,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
-import static com.youmehe.mediotry.Utils.getAllCodec;
-import static com.youmehe.mediotry.Utils.getAllCodecInfo;
+import static com.youmehe.mediatry.Utils.getAllCodec;
+import static com.youmehe.mediatry.Utils.getAllCodecInfo;
 
 public class ThirdFragment extends Fragment {
 

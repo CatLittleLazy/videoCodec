@@ -2,4 +2,5 @@
 <resources>
   <string name="mediaCodec">mediaCodec</string>
   <string name="videoCapabilities">videoCapabilities</string>
+  <string name="exoplayer">exoPlayer</string>
 </resources>

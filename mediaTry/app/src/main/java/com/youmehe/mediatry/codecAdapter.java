@@ -1,4 +1,4 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.youmehe.mediotry.Utils.getAllCodec;
+import static com.youmehe.mediatry.Utils.getAllCodec;
 
 /**
  * Created by youmehe on 5/11/21 11:31 PM description:
@@ -65,7 +65,7 @@ class codecAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
               //todo too bad imp
               int type = ((TextView) v).getText().toString().contains("ALL_CODECS") ? 0 : 1;
               codecAdapter codecAdapter =
-                  (com.youmehe.mediotry.codecAdapter) ((RecyclerView) itemView.getParent()).getAdapter();
+                  (com.youmehe.mediatry.codecAdapter) ((RecyclerView) itemView.getParent()).getAdapter();
               if (codecAdapter != null) {
                 try {
                   codecAdapter.setSupportCodec(getAllCodec(type));

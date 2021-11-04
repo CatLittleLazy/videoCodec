@@ -1,4 +1,4 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
 import org.junit.Test;
 

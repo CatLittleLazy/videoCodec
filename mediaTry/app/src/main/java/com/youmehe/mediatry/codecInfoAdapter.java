@@ -1,4 +1,4 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
 import android.content.Context;
 import android.media.MediaCodecInfo;
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.youmehe.mediotry.Utils.getAllCodecInfo;
+import static com.youmehe.mediatry.Utils.getAllCodecInfo;
 
 /**
  * Created by youmehe on 5/12/21 22:17 PM description:

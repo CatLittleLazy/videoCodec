@@ -1,4 +1,4 @@
-package com.youmehe.mediotry;
+package com.youmehe.mediatry;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,6 +33,10 @@ public class FirstFragment extends Fragment {
     view.findViewById(R.id.mediaCodec)
         .setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
             .navigate(R.id.action_FirstFragment_to_ThirdFragment));
+
+    view.findViewById(R.id.exoPlayer)
+            .setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
+                    .navigate(R.id.action_FirstFragment_to_MyExoFragment));
 
     //initSurface(view.findViewById(R.id.surface));
     //showVideoImage(view.findViewById(R.id.image));
