@@ -38,8 +38,8 @@ public class FirstFragment extends Fragment {
             .setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
                     .navigate(R.id.action_FirstFragment_to_MyExoFragment));
 
-    //initSurface(view.findViewById(R.id.surface));
-    //showVideoImage(view.findViewById(R.id.image));
+    initSurface(view.findViewById(R.id.surface));
+    showVideoImage(view.findViewById(R.id.image));
   }
 
   public void showVideoImage(ImageView imageView) {
