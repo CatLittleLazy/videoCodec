@@ -1,20 +1,27 @@
 package com.youmehe.mediatry;
 
+import android.media.MediaCodecList;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.MediaController;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -22,6 +29,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +40,8 @@ public class MyExoPlayerFragment extends Fragment {
     ExoPlayer myExoPlay;
     MediaPlayer myMediaPlayer;
     VideoView videoView;
+    MediaExtractor mediaExtractor;
+    ListView videoInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +69,7 @@ public class MyExoPlayerFragment extends Fragment {
                 }
             }
         });
+        videoInfo = view.findViewById(R.id.video_extractor_info);
         myMediaPlayer = new MediaPlayer();
         myPlayerView = view.findViewById(R.id.my_exoplayer_view);
         listView = view.findViewById(R.id.video_list);
@@ -98,6 +109,7 @@ public class MyExoPlayerFragment extends Fragment {
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 String path = items.get(position);
+                extractorInfo(path);
                 exoPlay(path);
                 mediaPlay(path);
             });
@@ -106,6 +118,27 @@ public class MyExoPlayerFragment extends Fragment {
         }
     }
 
-    public void getVideoList() {
+    private void extractorInfo(String path) {
+        mediaExtractor = new MediaExtractor();
+        try {
+            mediaExtractor.setDataSource(path);
+            MediaCodecList mcl = new MediaCodecList(MediaCodecList.ALL_CODECS);
+            List<String> items = new ArrayList<>();
+            int tracks = mediaExtractor.getTrackCount();
+            items.add("该手机共识别到 " + tracks + " 条轨道");
+            for (int i = 0; i < tracks; i++) {
+                MediaFormat format = mediaExtractor.getTrackFormat(i);
+                String codecName = mcl.findDecoderForFormat(format);
+                String content = (codecName == null ? "无可用解码器" : ("使用" + codecName + "解析")) + "->" + format.toString();
+                items.add(content);
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, items);
+            videoInfo.setAdapter(adapter);
+            videoInfo.setOnItemClickListener((parent, view, position, id) -> {
+                Toast.makeText(getContext(), items.get(position).split("->")[0], Toast.LENGTH_SHORT).show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
