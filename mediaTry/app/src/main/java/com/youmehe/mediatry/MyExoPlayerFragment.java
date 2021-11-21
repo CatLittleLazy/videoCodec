@@ -1,18 +1,25 @@
 package com.youmehe.mediatry;
 
+import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
+
+import android.graphics.Bitmap;
 import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -42,6 +49,10 @@ public class MyExoPlayerFragment extends Fragment {
     VideoView videoView;
     MediaExtractor mediaExtractor;
     ListView videoInfo;
+    ImageView imgThumbnailStart;
+    ImageView imgThumbnailMiddle;
+    MediaMetadataRetriever mmr;
+    private final int IMG_SIZE = 200;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,8 +84,11 @@ public class MyExoPlayerFragment extends Fragment {
         myMediaPlayer = new MediaPlayer();
         myPlayerView = view.findViewById(R.id.my_exoplayer_view);
         listView = view.findViewById(R.id.video_list);
+        imgThumbnailStart = view.findViewById(R.id.img_start);
+        imgThumbnailMiddle = view.findViewById(R.id.img_middle);
         videoView = view.findViewById(R.id.my_video_view);
         videoView.setOnPreparedListener(mp -> Log.i(TAG, "this video duration is " + videoView.getDuration() + " from video view"));
+        mmr = new MediaMetadataRetriever();
         initList();
     }
 
@@ -112,6 +126,8 @@ public class MyExoPlayerFragment extends Fragment {
                 extractorInfo(path);
                 exoPlay(path);
                 mediaPlay(path);
+                createThumbnailStart(path);
+                createThumbnailMiddle(path);
             });
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -140,5 +156,20 @@ public class MyExoPlayerFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createThumbnailStart(String path) {
+        try {
+            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(new File(path), new Size(IMG_SIZE, IMG_SIZE), null);
+            imgThumbnailStart.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createThumbnailMiddle(String path) {
+        mmr.setDataSource(path);
+        Bitmap bitmap = mmr.getFrameAtTime(Integer.MIN_VALUE);
+        imgThumbnailMiddle.setImageBitmap(bitmap);
     }
 }
