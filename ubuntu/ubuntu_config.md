@@ -58,3 +58,17 @@ https://github.com/jgraph/drawio-desktop/releases/tag/v15.4.0
 
 ### plantuml
 https://plantuml.com/zh/
+
+### how to uninstall wine
+
+https://askubuntu.com/questions/15551/how-to-remove-wine-completely
+
+```
+sudo apt-get remove --auto-remove winehq-stable 
+rm -rf $HOME/.wine
+rm -f $HOME/.config/menus/applications-merged/*wine*
+rm -rf $HOME/.local/share/applications/wine
+rm -f $HOME/.local/share/desktop-directories/*wine*
+rm -f $HOME/.local/share/icons/*wine*
+```
+

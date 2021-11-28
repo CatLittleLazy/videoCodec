@@ -15,7 +15,8 @@
     <activity
         android:name="com.youmehe.mediatry.MainActivity"
         android:label="@string/app_name"
-        android:theme="@style/Theme.MedioTry.NoActionBar">
+        android:theme="@style/Theme.MedioTry.NoActionBar"
+        android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 

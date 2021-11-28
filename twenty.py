@@ -21,10 +21,10 @@ import tkinter as tk
 import threading
 
 # 设置黑屏时间50s
-REST_TIME = 50
+REST_TIME = 5
 
 # 设置工作时间1200s
-WORK_TIME = 20 * 60
+WORK_TIME = 5 * 1
 
 # 主屏1920x1080
 SCRN_X = 1920
@@ -104,6 +104,14 @@ def main(flag):
 		window2.geometry(resolution)
 		window2['bg'] = 'black'
 		window2.wm_attributes('-topmost',1)
+		#创建todo label
+		l_todo = tk.Label(window2, text = todo, font =('宋体',11))
+		#设置背景色为黑色
+		l_todo['bg'] = 'black'
+		l_todo['fg'] = 'white'
+		l_todo['justify'] = 'left'
+		#设置倒计时文字位置
+		l_todo.place(x = 0,y = 0)
 		#设置黑屏时间50s
 		create_now = time.time() + REST_TIME
 		time_now()
@@ -113,6 +121,8 @@ def main(flag):
 if __name__ == '__main__':
 	while True:
 		main(1)
+		file = open("todo.txt", 'rb')
+		todo = file.read().decode()
 		main(2)
 
 	

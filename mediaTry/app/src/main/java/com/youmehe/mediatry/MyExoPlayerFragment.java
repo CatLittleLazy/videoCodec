@@ -2,6 +2,7 @@ package com.youmehe.mediatry;
 
 import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaCodecList;
 import android.media.MediaExtractor;
@@ -12,6 +13,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 import android.view.LayoutInflater;
@@ -112,7 +114,8 @@ public class MyExoPlayerFragment extends Fragment {
     private void initList() {
         try {
             List<String> items = new ArrayList<>();
-            File[] files = new File(Environment.getStorageDirectory().getAbsolutePath() + "/emulated/0/exoplayer/").listFiles();// 列出所有文件
+            File[] files = new File(Environment.getStorageDirectory() + "/emulated/0/exoplayer/").listFiles();// 列出所有文件
+            Log.e(TAG, files.length + "_" + Environment.getStorageDirectory() + "/emulated/0/exoplayer/");
             // 将所有文件存入list中
             if (files != null) {
                 for (File file : files) {
