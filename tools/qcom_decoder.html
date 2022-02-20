@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<input type="file" accept="text/plain" onchange="openFile(event)"> <br>
+	<div id="output" style="display: none;"></div>
+	<div id="main" style="width:100%;height: 500px;"></div>
+</body>
+<script src="echarts.min.js"></script>
+<script src="jquery.min.js"></script>
+<script type="text/javascript">
+	var xData = new Array()
+	var yData = new Array()
+	var openFile = function (event) {
+		xData = new Array();
+		yData = new Array();
+		var input = event.target;
+		var reader =new FileReader();
+		reader.onload = function() {
+			if (reader.result) {
+				$('#output').html(reader.result);
+				var tmpX = reader.result.split('\n')[1].replace('[','').replace(']','').split(',')
+				var tmpY = reader.result.split('\n')[0].replace('[','').replace(']','').split(',')
+				for(var i = 0; i < tmpX.length; i++) {
+					xData.push(tmpX[i])
+					yData.push(tmpY[i])
+					console.log(tmpY[i] + "_" + tmpX[i])
+				}
+				drawLine()
+			}
+		};
+		reader.readAsText(input.files[0]);
+	};
+	var drawLine = function() {
+		var myChart = echarts.init(document.getElementById('main'))
+		option = {
+			title: {
+				text: '高通解码速度'
+			},
+			tooltip: {},
+			legend: {
+				data: ['解码耗时ms']
+			},
+			xAxis: {
+				data: yData
+			},
+			dataZoom:[{
+				type: 'inside',
+				show: true,
+				realtime: true,
+				start: 0,
+				end: 100,
+			}],
+			yAxis: {},
+			series: [{
+				name: '解码耗时ms',
+				type: 'line',
+				data: xData
+			}]
+		};
+		myChart.setOption(option)
+	}
+	window.onload = drawLine
+</script>
+</html>

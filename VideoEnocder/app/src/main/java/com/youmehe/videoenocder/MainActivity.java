@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
     try {
       mediaCodec = MediaCodec.createEncoderByType("video/avc");
       MediaFormat mediaFormat =
-          MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_SCRAMBLED, 176, 144);
+          MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_SCRAMBLED, 1920, 1080);
       mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
       //2秒中1个I帧
-      mediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 2);
+      mediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 30);
       mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT,
           MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
       mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 400_000);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
       Surface surface = mediaCodec.createInputSurface();
       new Thread(() -> {
         mediaCodec.start();
-        mediaProjection.createVirtualDisplay("screen-codec", 540, 960, 1,
+        mediaProjection.createVirtualDisplay("screen-codec", 1920, 1080, 1,
             DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC, surface, null, null);
         while (true) {
           MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     FileOutputStream fileOutputStream = null;
     try {
       fileOutputStream =
-          new FileOutputStream(Environment.getExternalStorageDirectory() + "/3gpp.h263", true);
+          new FileOutputStream(Environment.getExternalStorageDirectory() + "/test.mov", true);
       fileOutputStream.write(array);
       fileOutputStream.write('\n');
     } catch (IOException e) {

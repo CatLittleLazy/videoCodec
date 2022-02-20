@@ -72,3 +72,38 @@ rm -f $HOME/.local/share/desktop-directories/*wine*
 rm -f $HOME/.local/share/icons/*wine*
 ```
 
+### install pinta (for image edit)
+
+https://launchpad.net/~pinta-maintainers/+archive/ubuntu/pinta-stable
+
+sudo apt-get install pinta
+
+
+
+### hotekey set  by autokey
+
+sudo apt-get install autokey-gtk
+
+https://blog.csdn.net/dongfang12n/article/details/99354975
+
+https://www.thinbug.com/q/45948143
+
+https://wiki.archlinux.org/title/Xmodmap
+
+
+
+### flameshot (for replace fastCapture stone)
+
+snap install flameshot or sudo apt-get install flameshot
+
+snap remove flameshot
+
+https://www.cnblogs.com/wkfvawl/p/11193837.html
+
+https://github.com/flameshot-org/flameshot/releases/tag/v0.10.2
+
+
+
+### timeshift (for system bak)
+
+https://github.com/teejee2008/timeshift

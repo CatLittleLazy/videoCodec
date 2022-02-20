@@ -124,8 +124,8 @@ class MyH264Player implements Runnable {
     public static Uri getImageContentUri(Context context, java.io.File imageFile) {
         String filePath = imageFile.getAbsolutePath();
         Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Video.Media._ID }, MediaStore.Video.Media.DATA + "=? ",
-                new String[] { filePath }, null);
+                new String[]{MediaStore.Video.Media._ID}, MediaStore.Video.Media.DATA + "=? ",
+                new String[]{filePath}, null);
         if (cursor != null && cursor.moveToFirst()) {
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
             Uri baseUri = Uri.parse("content://media/external/Video/media");
@@ -142,25 +142,6 @@ class MyH264Player implements Runnable {
     }
 
     public byte[] getBytes(String path) throws IOException {
-        ContentResolver resolver = context.getContentResolver();
-
-// "rw" for read-and-write;
-// "rwt" for truncating or overwriting existing file contents.
-        String readOnlyMode = "r";
-        try (ParcelFileDescriptor pfd =
-                     resolver.openFileDescriptor(Uri.parse(path), readOnlyMode)) {
-            // Perform operations on "pfd".
-            Log.e("test", pfd.toString());
-        } catch (IOException e) {
-            Log.e("test", "wrong1" + path);
-            e.printStackTrace();
-        }
-        ContentResolver resolver1 = context.getApplicationContext()
-                .getContentResolver();
-        try (InputStream stream = resolver.openInputStream()) {
-            // Perform operations on "stream".
-            Log.e("test", "wrong2" + path);
-        }
         Log.e("test", "getBytes");
         InputStream is = new DataInputStream(new FileInputStream(path));
         Log.e("test", "getBytes--");

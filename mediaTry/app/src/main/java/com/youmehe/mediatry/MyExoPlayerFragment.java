@@ -1,9 +1,14 @@
 package com.youmehe.mediatry;
 
+import static android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM;
+import static android.media.MediaMetadataRetriever.METADATA_KEY_XMP_LENGTH;
 import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaCodec;
+import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
@@ -57,7 +62,8 @@ public class MyExoPlayerFragment extends Fragment {
     private final int IMG_SIZE = 200;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_exo, container, false);
     }
@@ -70,7 +76,8 @@ public class MyExoPlayerFragment extends Fragment {
             public void onPlaybackStateChanged(int playbackState) {
                 switch (playbackState) {
                     case ExoPlayer.STATE_READY:
-                        Log.i(TAG, "this video duration is " + videoView.getDuration() + " from exoplayer");
+                        Log.i(TAG, "this video duration is " + videoView.getDuration() + " from " +
+                            "exoplayer");
                         break;
                     case ExoPlayer.STATE_ENDED:
                         Log.i(TAG, "this eof from exoplayer");
@@ -89,7 +96,25 @@ public class MyExoPlayerFragment extends Fragment {
         imgThumbnailStart = view.findViewById(R.id.img_start);
         imgThumbnailMiddle = view.findViewById(R.id.img_middle);
         videoView = view.findViewById(R.id.my_video_view);
-        videoView.setOnPreparedListener(mp -> Log.i(TAG, "this video duration is " + videoView.getDuration() + " from video view"));
+        videoView.setOnPreparedListener(mp -> {
+                Log.i(TAG, "this video duration is " + videoView.getDuration() + " from video " +
+                    "view");
+                Activity activity = getActivity();
+                Log.i(TAG, activity + "");
+                if (activity != null) {
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(4000);
+                            activity.runOnUiThread(() -> mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(1.0f)));
+                            Thread.sleep(40000);
+                            activity.runOnUiThread(() -> mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(1.0f)));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            }
+        );
         mmr = new MediaMetadataRetriever();
         initList();
     }
@@ -106,6 +131,9 @@ public class MyExoPlayerFragment extends Fragment {
     }
 
     public void mediaPlay(String path) {
+        if (videoView.isPlaying()) {
+            videoView.pause();
+        }
         videoView.setMediaController(new MediaController(getContext()));
         videoView.setVideoURI(Uri.parse(path));
         videoView.start();
@@ -114,23 +142,26 @@ public class MyExoPlayerFragment extends Fragment {
     private void initList() {
         try {
             List<String> items = new ArrayList<>();
-            File[] files = new File(Environment.getStorageDirectory() + "/emulated/0/exoplayer/").listFiles();// 列出所有文件
-            Log.e(TAG, files.length + "_" + Environment.getStorageDirectory() + "/emulated/0/exoplayer/");
+            File[] files = new File(Environment.getStorageDirectory() + "/emulated/0/Movies" +
+                "/").listFiles();// 列出所有文件
+            Log.e(TAG, files.length + "_" + Environment.getStorageDirectory() + "/emulated/0" +
+                "/videoSource/");
             // 将所有文件存入list中
             if (files != null) {
                 for (File file : files) {
                     items.add(file.getCanonicalPath());
                 }
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, items);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, items);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 String path = items.get(position);
                 extractorInfo(path);
-                exoPlay(path);
+//                exoPlay(path);
                 mediaPlay(path);
                 createThumbnailStart(path);
-                createThumbnailMiddle(path);
+//                createThumbnailMiddle(path);
             });
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -147,14 +178,33 @@ public class MyExoPlayerFragment extends Fragment {
             items.add("该手机共识别到 " + tracks + " 条轨道");
             for (int i = 0; i < tracks; i++) {
                 MediaFormat format = mediaExtractor.getTrackFormat(i);
+                if (format.getString("mime").contains("video")) {
+//                    format.setInteger("width", 1920);
+//                    format.setInteger("height", 1079);
+                    //
+                    Log.e(TAG, "rotation = " + format.getInteger(MediaFormat.KEY_ROTATION));
+                    for (MediaCodecInfo tmp : mcl.getCodecInfos()) {
+                        if (tmp.getName().equals("c2.qti.avc.decoder")) {
+                            MediaCodecInfo.CodecCapabilities capabilities =
+                                tmp.getCapabilitiesForType(format.getString("mime"));
+                            MediaCodecInfo.VideoCapabilities videoCapabilities = capabilities.getVideoCapabilities();
+                            Log.e(TAG, "isSupport" + capabilities.isFormatSupported(format));
+                        }
+                    }
+                    MediaCodec mediaCodec = MediaCodec.createDecoderByType("video/avc");
+//                    mediaCodec.configure(format,);
+                }
                 String codecName = mcl.findDecoderForFormat(format);
-                String content = (codecName == null ? "无可用解码器" : ("使用" + codecName + "解析")) + "->" + format.toString();
+                String content = (codecName == null ? "无可用解码器" : ("使用" + codecName + "解析")) +
+                    "->" + format.toString();
                 items.add(content);
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, items);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, items);
             videoInfo.setAdapter(adapter);
             videoInfo.setOnItemClickListener((parent, view, position, id) -> {
-                Toast.makeText(getContext(), items.get(position).split("->")[0], Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), items.get(position).split("->")[0],
+                    Toast.LENGTH_SHORT).show();
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -163,7 +213,8 @@ public class MyExoPlayerFragment extends Fragment {
 
     private void createThumbnailStart(String path) {
         try {
-            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(new File(path), new Size(IMG_SIZE, IMG_SIZE), null);
+            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(new File(path), new Size(IMG_SIZE
+                , IMG_SIZE), null);
             imgThumbnailStart.setImageBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
@@ -173,6 +224,7 @@ public class MyExoPlayerFragment extends Fragment {
     private void createThumbnailMiddle(String path) {
         mmr.setDataSource(path);
         Bitmap bitmap = mmr.getFrameAtTime(Integer.MIN_VALUE);
+        String sms = mmr.extractMetadata(METADATA_KEY_XMP_LENGTH);
         imgThumbnailMiddle.setImageBitmap(bitmap);
     }
 }
