@@ -352,12 +352,10 @@ def justTry(resultZipNames):
   P.add_argument("--dbg", "-v", action='store_true', help="dump debug info into xml")
   P.add_argument("--ignore", "-I", action='store_true', help="ignore minimum sample count")
   P.add_argument("result_zip", nargs="*")
-  A = P.parse_args("--ignore ")
+  A = P.parse_args()
+  A.result_zip = resultZipNames
 
   D = Data()
   for res in A.result_zip:
     D.parse_result(res)
   return D.summarize(A=A)
-
-if __name__ == "__main__":
-  justTry("2022.02.04_15.14.18.zip")

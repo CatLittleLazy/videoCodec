@@ -124,17 +124,41 @@ def getTopComment(fileName):
 		else :
 			return topComment
 
+def getPhoneCodecsPerformanceXml():
+	variant = os.popen("adb shell getprop ro.media.xml_variant.codecs_performance").readlines()[0].replace("\n","")
+	xmlName = "media_codecs_performance" + variant + "_old.xml" 
+	command = "adb pull vendor/etc/" + xmlName.replace("_old","") + " " + xmlName
+	# print(command)
+	os.system(command)
+	return xmlName
+
+
 if __name__ == '__main__':
+	# 1、获取手机media_codecs_performance.xml文件(高通或刷入gsi手机名称可能有后缀)
+	phoneXmlName = getPhoneCodecsPerformanceXml()
+	# 2、获取测试失败结果
 	resultZipNames = input("请输入帧率测试失败报告文件(多个文件可用空格间隔):\n")
-	print(resultZipNames)
-	print(justTry())
+	# 3、调用谷歌脚本生成xml文件并获取名称
+	fromGoogleXmlName = justTry(resultZipNames.split(' '))
 	#print(os.system("python get_achievable_rates.py --ignore " + resultZipNames))
-	topComment = getTopComment("media_codecs_performance.xml")
+	# 4、获取手机xml文件头部注释内容
+	topComment = getTopComment(phoneXmlName)
+	# 5、构造可保存注释的解析器
 	parser = ElementTree.XMLParser(target=CommentedTreeBuilder())
-	phoneXml = ElementTree.parse("media_codecs_performance.xml", parser=parser)
-	fromGoogleXml = ET.parse(".media_codecs_performance.xml").getroot()
+	# 6、解析手机中XML文件
+	phoneXml = ElementTree.parse(phoneXmlName, parser=parser)
+	# 7、解析谷歌生成XML文件
+	fromGoogleXml = ET.parse(fromGoogleXmlName).getroot()
+	# 8、调用比对方法方法获取修改完成后内容
 	content = tryFixed(phoneXml.getroot(),fromGoogleXml)
-	fo = open("test.xml","w")
-	print("文件名",fo.name)
-	fo.write(topComment + content)
-	fo.close()
+	# 9、由于xml的write无法保存注释，我们自行拼接内容后生成文件
+	finalXml = open(phoneXmlName.replace("_old",""),"w")
+	finalXml.write(topComment + content)
+	# 10、文件说明
+	print("----------------------------------------------------")
+	print("| 手机原始xml\n" + "|\t" + phoneXmlName)
+	print("| 谷歌生成xml\n" + "|\t" + fromGoogleXmlName)
+	print("| 对比生成xml\n" + "|\t" + finalXml.name)
+	print("----------------------------------------------------")
+	finalXml.close()
+
