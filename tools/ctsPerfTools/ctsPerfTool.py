@@ -132,6 +132,10 @@ def getPhoneCodecsPerformanceXml():
 	os.system(command)
 	return xmlName
 
+def addXmlToPhone(xmlName):
+	os.popen("adb root")
+	os.popen("adb remount")
+	os.system("adb push " + xmlName + " odm/etc/")
 
 if __name__ == '__main__':
 	# 1、获取手机media_codecs_performance.xml文件(高通或刷入gsi手机名称可能有后缀)
@@ -160,5 +164,9 @@ if __name__ == '__main__':
 	print("| 谷歌生成xml\n" + "|\t" + fromGoogleXmlName)
 	print("| 对比生成xml\n" + "|\t" + finalXml.name)
 	print("----------------------------------------------------")
+	# 11、push文件到手机odm/etc/目录下
+	addXmlToPhone(finalXml.name)
+	print("文件已放置odm/etc/目录，重启后生效")
 	finalXml.close()
+
 

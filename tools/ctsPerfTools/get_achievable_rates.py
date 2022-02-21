@@ -332,14 +332,16 @@ class Data:
         if resultInfo:
           try:
             jsonFile = zip.open(resultInfo)
-            jsonData = json.load(jsonFile, encoding='utf-8')
+            #jsonData = json.load(jsonFile, encoding='utf-8')
+            jsonData = json.load(jsonFile)
             device, build = jsonData['build_device'], jsonData['build_id']
           except ValueError:
             print >> sys.stderr, "could not parse %s" % resultInfo.filename
         for info in testInfos:
           jsonFile = zip.open(info)
           try:
-            jsonData = json.load(jsonFile, encoding='utf-8', object_pairs_hook=lambda items: items)
+            #jsonData = json.load(jsonFile, encoding='utf-8', object_pairs_hook=lambda items: items)
+            jsonData = json.load(jsonFile, object_pairs_hook=lambda items: items)
           except ValueError:
             print >> sys.stderr, "cannot parse JSON in %s" % info.filename
           self.parse_json(jsonData, device, build)
