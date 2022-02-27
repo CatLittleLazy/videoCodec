@@ -90,6 +90,5 @@ public class MainActivity extends AppCompatActivity {
         if (null != animationDrawable && animationDrawable.isRunning()) {
             animationDrawable.stop();
         }
-
     }
 }

@@ -1,11 +1,8 @@
 package com.youmehe.mediatry;
 
-import static android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM;
 import static android.media.MediaMetadataRetriever.METADATA_KEY_XMP_LENGTH;
-import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
@@ -18,24 +15,21 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Range;
 import android.util.Size;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.MediaController;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -45,6 +39,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MyExoPlayerFragment extends Fragment {
@@ -117,6 +112,7 @@ public class MyExoPlayerFragment extends Fragment {
         );
         mmr = new MediaMetadataRetriever();
         initList();
+        justTry();
     }
 
     public void exoPlay(String path) {
@@ -157,10 +153,10 @@ public class MyExoPlayerFragment extends Fragment {
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 String path = items.get(position);
-                extractorInfo(path);
+//                extractorInfo(path);
 //                exoPlay(path);
-                mediaPlay(path);
-                createThumbnailStart(path);
+//                mediaPlay(path);
+//                createThumbnailStart(path);
 //                createThumbnailMiddle(path);
             });
         } catch (Exception ex) {
@@ -210,6 +206,28 @@ public class MyExoPlayerFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private void justTry() {
+        Range<Integer> test = new Range<>(2, 1920);
+        test = test.intersect(5, 1921);
+        Log.e(TAG, test.toString());
+        MediaCodecList mcl = new MediaCodecList(MediaCodecList.ALL_CODECS);
+        for (MediaCodecInfo tmp : mcl.getCodecInfos()) {
+            if (tmp.getSupportedTypes()[0].contains("video")) {
+                Log.e(TAG, tmp.getName() + "_" + Arrays.toString(tmp.getSupportedTypes()));
+                for (String type : tmp.getSupportedTypes()) {
+//                    MediaCodecInfo.CodecCapabilities capabilities = tmp.getCapabilitiesForType("video/mp4v-es");
+                    MediaCodecInfo.CodecCapabilities capabilities = tmp.getCapabilitiesForType(type);
+                    MediaCodecInfo.VideoCapabilities videoCapabilities = capabilities.getVideoCapabilities();
+                    Log.e(TAG, "1 " + videoCapabilities.getSupportedFrameRates());
+                    Log.e(TAG, "2 " + videoCapabilities.getSupportedHeights());
+                    Log.e(TAG, "3 " + videoCapabilities.getSupportedWidths());
+                    Log.e(TAG, "4 " + videoCapabilities.getBitrateRange());
+                }
+            }
+        }
+    }
+
 
     private void createThumbnailStart(String path) {
         try {
