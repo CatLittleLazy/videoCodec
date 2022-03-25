@@ -22,8 +22,8 @@
 
 1. enter test suit and run these commands
    ```sh
-     run cts -m CtsMediaTestCases -t android.media.cts.VideoDecoderPerfTest
-     run cts -m CtsVideoTestCases -t android.video.cts.VideoEncoderDecoderTest
+   run cts -m CtsMediaTestCases -t android.media.cts.VideoDecoderPerfTest
+   run cts -m CtsVideoTestCases -t android.video.cts.VideoEncoderDecoderTest
    ```
    > these tests total  1044 = (156 + 366) x 2  may cost 3 hours, after test, check the result to make sure how many failures there are
 
@@ -86,14 +86,11 @@
 
    > you should copy the media files before use this way like this http://xxx.md
 
-## 2. take effective
+## 2. which step can be improved
 
-1. use Google cts create the failure results
-2. write python to get the failure test cases
-3. auto run these failure test cases 10 and create zip
-4. use Google pyttsnhhon create the correct frame rate
-5. get the phone xml and replace
-6. retry the failure teste cases
+![image-20220325234902084](CTS_perf_tools.assets/image-20220325234902084.png)
+
+## 3. python file
 
 ### 1.2 write python to get the failure test cases
 
