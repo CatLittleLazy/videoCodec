@@ -106,22 +106,22 @@ def perc(data, p, fn=round):
 
 
 def genXml(data, A=None):
-  yield '<?xml version="1.0" encoding="utf-8" ?>'
-  yield '<!-- Copyright 2016 The Android Open Source Project'
-  yield ''
-  yield '     Licensed under the Apache License, Version 2.0 (the "License");'
-  yield '     you may not use this file except in compliance with the License.'
-  yield '     You may obtain a copy of the License at'
-  yield ''
-  yield '          http://www.apache.org/licenses/LICENSE-2.0'
-  yield ''
-  yield '     Unless required by applicable law or agreed to in writing, software'
-  yield '     distributed under the License is distributed on an "AS IS" BASIS,'
-  yield '     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.'
-  yield '     See the License for the specific language governing permissions and'
-  yield '     limitations under the License.'
-  yield '-->'
-  yield ''
+  #yield '<?xml version="1.0" encoding="utf-8" ?>'
+  #yield '<!-- Copyright 2016 The Android Open Source Project'
+  #yield ''
+  #yield '     Licensed under the Apache License, Version 2.0 (the "License");'
+  #yield '     you may not use this file except in compliance with the License.'
+  #yield '     You may obtain a copy of the License at'
+  #yield ''
+  #yield '          http://www.apache.org/licenses/LICENSE-2.0'
+  #yield ''
+  #yield '     Unless required by applicable law or agreed to in writing, software'
+  #yield '     distributed under the License is distributed on an "AS IS" BASIS,'
+  #yield '     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.'
+  #yield '     See the License for the specific language governing permissions and'
+  #yield '     limitations under the License.'
+  #yield '-->'
+  #yield ''
   yield '<MediaCodecs>'
   last_section = None
   from collections import namedtuple
@@ -258,7 +258,8 @@ class Data:
                            p50=p50, p60=p60, p70=p70, p80=p80, p90=p90, p95=p95, p100=p100))))
     for dev, ddata in xmlInfo.items():
       outFile = '{}.media_codecs_performance.xml'.format(dev)
-      print (sys.stderr, "generating", outFile)
+      # todo
+      # print (sys.stderr, "generating", outFile)
       with open(outFile, "wt") as out:
         for l in genXml(ddata, A=A):
           out.write(l + '\n')

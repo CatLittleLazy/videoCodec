@@ -1,0 +1,7 @@
+<MediaCodecs>
+    <Decoders>
+        <MediaCodec name="c2.android.vp8.decoder" type="video/x-vnd.on2.vp8" update="true">
+            <Limit name="measured-frame-rate-320x180" range="162-162" /> <!-- N=20 v90%=1.0 -->
+        </MediaCodec>
+    </Decoders>
+</MediaCodecs>

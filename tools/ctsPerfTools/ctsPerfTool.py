@@ -63,7 +63,7 @@ def tryFixed(old,new):
 			#获取当前codec存在的Limit列表
 			fLimits = fCodecNode.findall("Limit")
 			#print(fCodecName)
-			print("--------")
+			print("----------------------------------------------------")
 			#在手机使用的xml中找到对应的Decoder或Encoder后遍历MediaCodec
 			for pCodecNode in old.find(codeType).findall("MediaCodec"):
 				#获取当前codecName,eg:c2.android.h263.decoder
@@ -82,7 +82,7 @@ def tryFixed(old,new):
 							#当limit名称相同时视为找到修改点,eg:measured-frame-rate-1280x720
 							if fLimitName == pLimitName:
 								#打印修改点
-								print("\t"+ fLimitName + "range :" + pLimit.get("range") + "-->" + fLimit.get("range"))
+								print("\t"+ fLimitName + "range :[" + pLimit.get("range") + "]-->[" + fLimit.get("range") + "]")
 								#对内容进行修改
 								pLimit.set("range",fLimit.get("range"))
 								hasChanged = False
@@ -129,13 +129,20 @@ def getPhoneCodecsPerformanceXml():
 	xmlName = "media_codecs_performance" + variant + "_old.xml" 
 	command = "adb pull vendor/etc/" + xmlName.replace("_old","") + " " + xmlName
 	# print(command)
-	os.system(command)
+	os.popen(command)
 	return xmlName
 
 def addXmlToPhone(xmlName):
 	os.popen("adb root")
-	os.popen("adb remount")
-	os.system("adb push " + xmlName + " odm/etc/")
+	remountResult = os.popen("adb remount").readlines()[0]
+	print(remountResult)
+	if "succe" in remountResult:
+		os.popen("adb push " + xmlName + " odm/etc/")
+		return "odm/etc"
+	else:
+		os.popen("adb shell mkdir -p sdcard/ctsPerf")
+		os.system("adb push " + xmlName + " sdcard/ctsPerf/")
+		return "sdcard/ctsPerf"
 
 if __name__ == '__main__':
 	# 1、获取手机media_codecs_performance.xml文件(高通或刷入gsi手机名称可能有后缀)
@@ -165,8 +172,12 @@ if __name__ == '__main__':
 	print("| 对比生成xml\n" + "|\t" + finalXml.name)
 	print("----------------------------------------------------")
 	# 11、push文件到手机odm/etc/目录下
-	addXmlToPhone(finalXml.name)
-	print("文件已放置odm/etc/目录，重启后生效")
+	pushPath = addXmlToPhone(finalXml.name)
+	print("文件已放置" + pushPath + "/目录")
+	if pushPath == "odm/etc":
+		print("重启后生效,可使用套件复测失败项")
+	else:
+		print("由于设备未root，即将其他方式验证")
 	finalXml.close()
 
 
