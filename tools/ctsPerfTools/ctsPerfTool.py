@@ -125,18 +125,24 @@ def getTopComment(fileName):
 			return topComment
 
 def getPhoneCodecsPerformanceXml():
-	variant = os.popen("adb shell getprop ro.media.xml_variant.codecs_performance").readlines()[0].replace("\n","")
-	xmlName = "media_codecs_performance" + variant + "_old.xml" 
-	command = "adb pull vendor/etc/" + xmlName.replace("_old","") + " " + xmlName
-	# print(command)
-	os.popen(command)
-	return xmlName
+	if len(os.popen("adb devices").readlines()[1]) > 1:
+		variant = os.popen("adb shell getprop ro.media.xml_variant.codecs_performance").readlines()[0].replace("\n","")
+		xmlName = "media_codecs_performance" + variant + "_old.xml" 
+		command = "adb pull vendor/etc/" + xmlName.replace("_old","") + " " + xmlName
+		# print(command)
+		os.popen(command)
+		return xmlName
+	else:
+		print("请确保手机已连接后重试")
+		os._exit(0)
+		# sys.exit()
+		return
 
 def addXmlToPhone(xmlName):
 	os.popen("adb root")
-	remountResult = os.popen("adb remount").readlines()[0]
-	print(remountResult)
-	if "succe" in remountResult:
+	remountResult = os.popen("adb remount").readlines()
+	# print(remountResult)
+	if len(remountResult) > 0:
 		os.popen("adb push " + xmlName + " odm/etc/")
 		return "odm/etc"
 	else:

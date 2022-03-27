@@ -84,7 +84,7 @@
    
 2. if u have too many failures, u can write this command repeat, and change the end with bat or sh
 
-   > you should copy the media files before use this way like this http://xxx.md
+   > https://github.com/CatLittleLazy/videoCodec/blob/main/note/cts/Cts.md#3-run-with-adb-commands
 
 ## 2. which step can be improved
 
@@ -92,18 +92,16 @@
 
 ## 3. Python
 
-1. 
+1. [step 3 to 4](https://github.com/CatLittleLazy/videoCodec/blob/main/tools/ctsPerfTools.zip)
 
-### 1.2 write python to get the failure test cases
+   1. phone root
 
-rm SF1346439884568
+      ![image-20220327225554896](CTS_perf_tools.assets/image-20220327225554896.png)
 
-adb shell am instrument -e class android.media.cts.VideoDecoderPerfTest#testVp8Goog0Perf0320x0180 -w android.media.cts/androidx.test.runner.AndroidJUnitRunner
+   2. phone not root
 
-### 
+      ![image-20220327230629609](CTS_perf_tools.assets/image-20220327230629609.png)
+   
+2. step 5
 
-
-
-ll 排序
-
-https://www.cnblogs.com/pipiyan/p/10600058.html
+   > to do, file

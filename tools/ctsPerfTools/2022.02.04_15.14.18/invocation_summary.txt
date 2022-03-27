@@ -1,0 +1,30 @@
+TEXT: 
+============================================
+================= Results ==================
+=============== Consumed Time ==============
+    arm64-v8a CtsMediaTestCases: 24s
+Total aggregated tests run time: 24s
+============== TOP 1 Slow Modules ==============
+    arm64-v8a CtsMediaTestCases: 0.04 tests/sec [1 tests / 24247 msec]
+============== Modules Preparation Times ==============
+    arm64-v8a CtsMediaTestCases => prep = 13566 ms || clean = 2847 ms
+Total preparation time: 13s  ||  Total tear down time: 2s
+=======================================================
+============== Modules Retries Information ==============
+    arm64-v8a CtsMediaTestCases:
+        Retry Success (Failed test became Pass)   = 0
+        Retry Failure (Failed test stayed Failed) = 1
+        Retry Time                                = 3m 56s
+Summary:
+Total Retry Success (Failed test became Pass) = 0
+Total Retry Failure (Failed test stayed Failed) = 1
+Total Retry Time                                = 3m 56s
+====================================================
+=============== Summary ===============
+Total Run time: 4m 47s
+1/1 modules completed
+Total Tests       : 1
+PASSED            : 0
+FAILED            : 1
+============== End of Results ==============
+============================================
