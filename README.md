@@ -1,4 +1,4 @@
-## videoCodec 杂七杂八
+## 杂七杂八
 
 #### ODM 和 OEM
 

@@ -94,7 +94,7 @@
    adb logcat -c & adb logcat > testLog.txt
    ```
    
-7. fast run
+7. [fast run](https://github.com/CatLittleLazy/videoCodec/tree/main/note/cts/FastTest)
 
 ## 4. analyzing failure test case
 
