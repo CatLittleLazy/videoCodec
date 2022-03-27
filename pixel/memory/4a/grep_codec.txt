@@ -1,3 +1,0 @@
-mediacodec      994      1 5 23:16:50 ?     00:06:49 media.hwcodec /vendor.qti.media.c2@1.0-service
-mediacodec     1150      1 0 23:16:51 ?     00:00:00 media.codec hw/android.hardware.media.omx@1.0-service
-mediacodec     1186      1 0 23:16:51 ?     00:00:04 media.swcodec oid.media.swcodec/bin/mediaswcodec
