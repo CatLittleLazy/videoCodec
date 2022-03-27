@@ -13,6 +13,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.ExoPlayer;
@@ -112,7 +114,7 @@ public class MyExoPlayerFragment extends Fragment {
         );
         mmr = new MediaMetadataRetriever();
         initList();
-        justTry();
+//        justTry();
     }
 
     public void exoPlay(String path) {
@@ -135,15 +137,16 @@ public class MyExoPlayerFragment extends Fragment {
         videoView.start();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void initList() {
         try {
             List<String> items = new ArrayList<>();
-            File[] files = new File(Environment.getStorageDirectory() + "/emulated/0/Movies" +
+            File[] files = new File(Environment.getStorageDirectory() + "/emulated/0/test/CtsMediaTestCases-1.4" +
                 "/").listFiles();// 列出所有文件
-            Log.e(TAG, files.length + "_" + Environment.getStorageDirectory() + "/emulated/0" +
-                "/videoSource/");
             // 将所有文件存入list中
             if (files != null) {
+                Log.e(TAG, files.length + "_" + Environment.getStorageDirectory() + "/emulated/0" +
+                    "/test/CtsMediaTestCases-1.4/");
                 for (File file : files) {
                     items.add(file.getCanonicalPath());
                 }

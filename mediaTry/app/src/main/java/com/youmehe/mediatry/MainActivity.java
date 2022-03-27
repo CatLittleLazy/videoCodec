@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.JetPlayer;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -27,12 +29,14 @@ public class MainActivity extends AppCompatActivity {
 //        checkPermission();
 //    }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void checkPermission() {
         if (checkSelfPermission(
             Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                Manifest.permission.MANAGE_EXTERNAL_STORAGE
             }, 1);
         }
     }

@@ -13,7 +13,7 @@ adb shell pm grant android.media.cts android.permission.RECORD_AUDIO
 adb shell pm grant android.media.cts android.permission.WRITE_EXTERNAL_STORAGE
 
 
-adb install ctsContentProvider.apk
+adb install TradefedContentProvider.apk
 
 adb shell pm grant android.tradefed.contentprovider android.permission.WRITE_EXTERNAL_STORAGE
 

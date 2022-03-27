@@ -90,7 +90,9 @@
 
 ![image-20220325234902084](CTS_perf_tools.assets/image-20220325234902084.png)
 
-## 3. python file
+## 3. Python
+
+1. 
 
 ### 1.2 write python to get the failure test cases
 
