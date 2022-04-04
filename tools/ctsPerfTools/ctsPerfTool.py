@@ -138,7 +138,7 @@ def getPhoneCodecsPerformanceXml():
 		# sys.exit()
 		return
 
-def addXmlToPhone(xmlName):
+def pushXmlToPhone(xmlName,retryXml):
 	os.popen("adb root")
 	remountResult = os.popen("adb remount").readlines()
 	# print(remountResult)
@@ -148,6 +148,7 @@ def addXmlToPhone(xmlName):
 	else:
 		os.popen("adb shell mkdir -p sdcard/ctsPerf")
 		os.system("adb push " + xmlName + " sdcard/ctsPerf/")
+		os.system("adb push " + retryXml + " sdcard/ctsPerf/needTest.xml")
 		return "sdcard/ctsPerf"
 
 if __name__ == '__main__':
@@ -157,6 +158,9 @@ if __name__ == '__main__':
 	resultZipNames = input("请输入帧率测试失败报告文件(多个文件可用空格间隔):\n")
 	# 3、调用谷歌脚本生成xml文件并获取名称
 	fromGoogleXmlName = justTry(resultZipNames.split(' '))
+	if fromGoogleXmlName is None:
+		print("测试文件json文件丢失,无法生成有效文件，请重新复测")
+		os._exit(0)
 	#print(os.system("python get_achievable_rates.py --ignore " + resultZipNames))
 	# 4、获取手机xml文件头部注释内容
 	topComment = getTopComment(phoneXmlName)
@@ -178,12 +182,13 @@ if __name__ == '__main__':
 	print("| 对比生成xml\n" + "|\t" + finalXml.name)
 	print("----------------------------------------------------")
 	# 11、push文件到手机odm/etc/目录下
-	pushPath = addXmlToPhone(finalXml.name)
+	pushPath = pushXmlToPhone(finalXml.name,fromGoogleXmlName)
 	print("文件已放置" + pushPath + "/目录")
 	if pushPath == "odm/etc":
 		print("重启后生效,可使用套件复测失败项")
+		print("可参考: https://github.com/CatLittleLazy/videoCodec/blob/main/note/cts/Cts.md")
 	else:
-		print("由于设备未root，即将其他方式验证")
+		print("由于设备未root，请执行adb_retry脚本进行复测，关键日志：ctsPerfTool")
 	finalXml.close()
 
 

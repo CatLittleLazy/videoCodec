@@ -173,8 +173,8 @@ def genXml(data, A=None):
             quality += 1
             if RG == 10:
               # find best pub_lo and pub_hi
-              for i in range(N / 2):
-                pub_lo_, pub_hi_ = min(int(data[N / 2 - i - 1] * T), round(geo), int(med)), max(math.ceil(data[N / 2 + i] / T), round(geo))
+              for i in range(N // 2):
+                pub_lo_, pub_hi_ = min(int(data[N // 2 - i - 1] * T), round(geo), int(med)), max(math.ceil(data[N // 2 + i] / T), round(geo))
                 if pub_hi_ > pub_lo_ * TO:
                   # ???
                   pub_lo = min(pub_lo, math.ceil(pub_hi_ / TO))
@@ -263,8 +263,8 @@ class Data:
       with open(outFile, "wt") as out:
         for l in genXml(ddata, A=A):
           out.write(l + '\n')
-          print(l)
-      print (sys.stderr, "generated", outFile)
+          # print(l)
+      # print (sys.stderr, "generated", outFile)
       return outFile
 
   def parse_fmt(self, fmt):
