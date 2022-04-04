@@ -39,6 +39,10 @@
    run cts -m CtsVideoTestCases -t android.video.cts.VideoEncoderDecoderTest#testAvcGoog0Perf0320x0240 --retry-strategy ITERATIONS --max-testcase-run-count 10
    ```
    
+   ![image-20220404155737239](Cts.assets/image-20220404155737239.png)
+   
+   ![image-20220404161431837](Cts.assets/image-20220404161431837.png)
+   
 3. [result and log](https://source.android.com/compatibility/cts/interpret)
 
    ![image-20220327142038660](Cts.assets/image-20220327142038660.png)

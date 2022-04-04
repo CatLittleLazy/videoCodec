@@ -1,19 +1,23 @@
 package com.youmehe.mediatry;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.JetPlayer;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Environment;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -29,24 +33,33 @@ public class MainActivity extends AppCompatActivity {
 //        checkPermission();
 //    }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
     public void checkPermission() {
         if (checkSelfPermission(
             Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE
             }, 1);
         }
     }
 
+    private void requestmanageexternalstorage_Permission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // 先判断有没有权限
+            if (Environment.isExternalStorageManager()) {
+                Toast.makeText(this, "Android VERSION  R OR ABOVE，HAVE MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Android VERSION  R OR ABOVE，NO MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + this.getPackageName()));
+                startActivityForResult(intent, 2);
+            }
+        }
+    }
 
     private Button startbtn;
     private Button stopbtn;
     private ImageView imageView;
     private AnimationDrawable animationDrawable;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +81,13 @@ public class MainActivity extends AppCompatActivity {
 //        //结束
 //        stopbtn = findViewById(R.id.btn_stop);
 //        stopbtn.setOnClickListener(view -> animationDrawable.stop());
-        checkPermission();
+//        checkPermission();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        requestmanageexternalstorage_Permission();
     }
 
     public void tryPlayer() {

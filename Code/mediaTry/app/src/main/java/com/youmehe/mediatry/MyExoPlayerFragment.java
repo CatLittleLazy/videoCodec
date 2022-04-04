@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcel;
 import android.util.Log;
 import android.util.Range;
 import android.util.Size;
@@ -38,11 +39,21 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyExoPlayerFragment extends Fragment {
     private static final String TAG = "MyExoPlayerFragment";
@@ -96,25 +107,37 @@ public class MyExoPlayerFragment extends Fragment {
         videoView.setOnPreparedListener(mp -> {
                 Log.i(TAG, "this video duration is " + videoView.getDuration() + " from video " +
                     "view");
-                Activity activity = getActivity();
-                Log.i(TAG, activity + "");
-                if (activity != null) {
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(4000);
-                            activity.runOnUiThread(() -> mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(1.0f)));
-                            Thread.sleep(40000);
-                            activity.runOnUiThread(() -> mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(1.0f)));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                Class<? extends MediaPlayer> mMediaPlayerClass = mp.getClass();
+                try {
+                    Method method = mMediaPlayerClass.getDeclaredMethod("setParameter", Integer.class, Parcel.class);
+                    Log.e(TAG, "go go go");
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
                 }
+//                Activity activity = getActivity();
+//                Log.i(TAG, activity + "");
+//                if (activity != null) {
+//                    new Thread(() -> {
+//                        try {
+//                            Thread.sleep(4000);
+//                            activity.runOnUiThread(() -> mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(1.0f)));
+//                            Thread.sleep(40000);
+//                            activity.runOnUiThread(() -> mp.setPlaybackParams(mp.getPlaybackParams().setSpeed(1.0f)));
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
+//                }
             }
         );
         mmr = new MediaMetadataRetriever();
         initList();
 //        justTry();
+        try {
+            initializeConfig(new File("sdcard/ctsPerf/needTest.xml"));
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void exoPlay(String path) {
@@ -156,7 +179,7 @@ public class MyExoPlayerFragment extends Fragment {
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 String path = items.get(position);
-//                extractorInfo(path);
+                extractorInfo(path);
 //                exoPlay(path);
 //                mediaPlay(path);
 //                createThumbnailStart(path);
@@ -178,6 +201,17 @@ public class MyExoPlayerFragment extends Fragment {
             for (int i = 0; i < tracks; i++) {
                 MediaFormat format = mediaExtractor.getTrackFormat(i);
                 if (format.getString("mime").contains("video")) {
+                    Class<? extends MediaFormat> mFormatClass = format.getClass();
+                    try {
+                        Method method = mFormatClass.getDeclaredMethod("getMap");
+                        Log.e(TAG, "go go go");
+                        method.setAccessible(true);
+                        Map<String, Object> map = (Map<String, Object>) method.invoke(format);
+                        Log.e(TAG, map.get("size-range") + "");
+                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    format.getString("size-range");
 //                    format.setInteger("width", 1920);
 //                    format.setInteger("height", 1079);
                     //
@@ -216,7 +250,7 @@ public class MyExoPlayerFragment extends Fragment {
         Log.e(TAG, test.toString());
         MediaCodecList mcl = new MediaCodecList(MediaCodecList.ALL_CODECS);
         for (MediaCodecInfo tmp : mcl.getCodecInfos()) {
-            if (tmp.getSupportedTypes()[0].contains("video")) {
+            if (tmp.getSupportedTypes()[0].contains("video") && !tmp.isAlias() && !tmp.isEncoder() && tmp.getName().contains("mpeg4")) {
                 Log.e(TAG, tmp.getName() + "_" + Arrays.toString(tmp.getSupportedTypes()));
                 for (String type : tmp.getSupportedTypes()) {
 //                    MediaCodecInfo.CodecCapabilities capabilities = tmp.getCapabilitiesForType("video/mp4v-es");
@@ -247,5 +281,58 @@ public class MyExoPlayerFragment extends Fragment {
         Bitmap bitmap = mmr.getFrameAtTime(Integer.MIN_VALUE);
         String sms = mmr.extractMetadata(METADATA_KEY_XMP_LENGTH);
         imgThumbnailMiddle.setImageBitmap(bitmap);
+    }
+
+    public void initializeConfig(File file) throws XmlPullParserException, IOException {
+        Map<String, Range<Double>> xmlConfig = createConfigMap(file);
+        for (String tmp : xmlConfig.keySet()) {
+            Log.e(TAG, "wyt_" + tmp);
+            Log.e(TAG, "wyt_value_" + Arrays.toString(new Range[]{xmlConfig.get(tmp)}));
+        }
+    }
+
+    public static Map<String, Range<Double>> createConfigMap(File file)
+        throws XmlPullParserException, IOException {
+        try (FileInputStream stream = new FileInputStream(file)) {
+            return createConfigMap(stream);
+        }
+    }
+
+    public static Map<String, Range<Double>> createConfigMap(FileInputStream fileStream)
+        throws XmlPullParserException, IOException {
+        Map<String, Range<Double>> xmlConfig = new HashMap<>();
+        XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+        parser.setInput(new InputStreamReader(fileStream));
+        parser.nextTag();
+        int type = parser.getEventType();
+        String key = "";
+        Range<Double> range;
+        while (type != XmlPullParser.END_DOCUMENT) {
+            switch (type) {
+                case XmlPullParser.START_DOCUMENT:
+                    break;
+                case XmlPullParser.START_TAG:
+                    if (parser.getName().equals("MediaCodec")) {
+                        String codecName = parser.getAttributeValue(null, "name");
+                        String mimeType = parser.getAttributeValue(null, "type");
+                        key = codecName + "_" + mimeType;
+                    }
+                    if (parser.getName().equals("Limit")) {
+                        String name = parser.getAttributeValue(null, "name");
+                        String[] rangeContent = parser.getAttributeValue(null, "range").split("-");
+                        key = key + "_" + name.split("-")[3];
+                        range = new Range<>(Double.valueOf(rangeContent[0]), Double.valueOf(rangeContent[1]));
+                        xmlConfig.put(key, range);
+                    }
+                    break;
+                case XmlPullParser.END_TAG:
+                    if (parser.getName().equals("Limit")) {
+                        key = key.substring(0, key.lastIndexOf("_"));
+                    }
+                    break;
+            }
+            type = parser.next();
+        }
+        return xmlConfig;
     }
 }

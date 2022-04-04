@@ -29,14 +29,12 @@
 
 ### 1.2 get the retry zip
 
-1. we get the retry the failure test enough times like this
+1. we should  retry the failure test enough times like this
    ```sh
-   run cts -m CtsMediaTestCases -t android.media.cts.VideoDecoderPerfTest#testVp8Goog0Perf0320x0180 --retry-strategy ITERATIONS --max-testcase-run-count 10  
+   run cts -m CtsMediaTestCases -t android.media.cts.VideoDecoderPerfTest#testVp8Goog0Perf0320x0180 --retry-strategy ITERATIONS --max-testcase-run-count 10
    ```
    
-   - aoe
-   
-   > after read the python source code,u will find the result which created by run videoTestCase and mediaTestCases one time is useless,so we should create the result one module by one 
+   > after read the python source code,u will find the result which created by run videoTestCase and mediaTestCases one time is useless,so we should create the module result one by one
 
 ### 1.3 get the correct value
 
@@ -88,20 +86,54 @@
 
 ## 2. which step can be improved
 
-![image-20220325234902084](CTS_perf_tools.assets/image-20220325234902084.png)
+![image-20220404162101278](CTS_perf_tools.assets/image-20220404162101278.png)
 
-## 3. Python
+## 3.  how to use
 
-1. [step 3 to 4](https://github.com/CatLittleLazy/videoCodec/blob/main/tools/ctsPerfTools.zip)
+1. use Google cts check if there are some failures test cases in CtsVideoTestCases or CtsMediaTestCases
 
-   1. phone root
+   1. CtsVideoTestCases
 
-      ![image-20220327225554896](CTS_perf_tools.assets/image-20220327225554896.png)
+      ![image-20220404145624900](CTS_perf_tools.assets/image-20220404145624900.png)
 
-   2. phone not root
+   2. CtsMediaTestCases
 
-      ![image-20220327230629609](CTS_perf_tools.assets/image-20220327230629609.png)
-   
-2. step 5
+      ![image-20220404145804321](CTS_perf_tools.assets/image-20220404145804321.png)
 
-   > to do, file
+2. Improve efficiency Part
+
+   1. step 2
+
+      1. use getRetryTestCommand.py to get retry command
+
+         ![image-20220404172734367](CTS_perf_tools.assets/image-20220404172734367.png)
+
+      2. use the cts retry command to get the retry zip file
+
+         ![image-20220404164938462](CTS_perf_tools.assets/image-20220404164938462.png)
+
+         ![image-20220404172818858](CTS_perf_tools.assets/image-20220404172818858.png)
+
+         ![image-20220404172852855](CTS_perf_tools.assets/image-20220404172852855.png)
+
+   2. step 3~4
+
+      1. phone root
+
+         ![image-20220404184637621](CTS_perf_tools.assets/image-20220404184637621.png)
+
+      2. phone not root 
+
+         ![image-20220404185022755](CTS_perf_tools.assets/image-20220404185022755.png)
+
+   3. step 5
+
+      ![image-20220404185508902](CTS_perf_tools.assets/image-20220404185508902.png)
+
+      ![image-20220404185551993](CTS_perf_tools.assets/image-20220404185551993.png)
+
+#### 4. source download
+
+​	
+
+ 

@@ -5,7 +5,7 @@
       <map>
         <entry key="../../Downloads/Android/Sdk/platforms/android-30/data/res/layout/simple_list_item_1.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/drawable/theme.xml" value="0.371875" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18333333333333332" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.18333333333333332" />
         <entry key="app/src/main/res/layout/fragment_exo.xml" value="0.23641304347826086" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.15364583333333334" />
