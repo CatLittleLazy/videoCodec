@@ -132,8 +132,15 @@
 
       ![image-20220404185551993](CTS_perf_tools.assets/image-20220404185551993.png)
 
-#### 4. source download
+#### 4. [tool download](http://youmehe.wang/CtsSource/ctsPerfTools.zip)
 
-​	
+| file                                           | despriction                |
+| ---------------------------------------------- | -------------------------- |
+| ctsPerfTool.py                                 | tools for step 3~4         |
+| get_achievable_rates.py                        | google python for cts perf |
+| getRetryTestCommand.py                         | toofs for step 2 or 5      |
+| CtsMediaTestCases.apk or CtsVideoTestCases.apk | for phone withou root      |
 
- 
+> python 3.8.10
+>
+> [fastRun](https://github.com/CatLittleLazy/videoCodec/tree/main/note/cts/FastTest)
