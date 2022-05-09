@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# https://source.android.com/devices/graphics/arch-bq-gralloc
 import os
 import sys
 import webbrowser
