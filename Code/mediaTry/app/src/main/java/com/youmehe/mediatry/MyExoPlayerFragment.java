@@ -132,12 +132,12 @@ public class MyExoPlayerFragment extends Fragment {
         );
         mmr = new MediaMetadataRetriever();
         initList();
-//        justTry();
-        try {
-            initializeConfig(new File("sdcard/ctsPerf/needTest.xml"));
-        } catch (XmlPullParserException | IOException e) {
-            e.printStackTrace();
-        }
+        justTry();
+//        try {
+//            initializeConfig(new File("sdcard/ctsPerf/needTest.xml"));
+//        } catch (XmlPullParserException | IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void exoPlay(String path) {
@@ -250,12 +250,13 @@ public class MyExoPlayerFragment extends Fragment {
         Log.e(TAG, test.toString());
         MediaCodecList mcl = new MediaCodecList(MediaCodecList.ALL_CODECS);
         for (MediaCodecInfo tmp : mcl.getCodecInfos()) {
-            if (tmp.getSupportedTypes()[0].contains("video") && !tmp.isAlias() && !tmp.isEncoder() && tmp.getName().contains("mpeg4")) {
+            if (tmp.getSupportedTypes()[0].contains("video") && !tmp.isAlias() && !tmp.isEncoder() && (tmp.getName().contains("mpeg4") || tmp.getName().contains("mpeg2"))) {
                 Log.e(TAG, tmp.getName() + "_" + Arrays.toString(tmp.getSupportedTypes()));
                 for (String type : tmp.getSupportedTypes()) {
 //                    MediaCodecInfo.CodecCapabilities capabilities = tmp.getCapabilitiesForType("video/mp4v-es");
                     MediaCodecInfo.CodecCapabilities capabilities = tmp.getCapabilitiesForType(type);
                     MediaCodecInfo.VideoCapabilities videoCapabilities = capabilities.getVideoCapabilities();
+
                     Log.e(TAG, "1 " + videoCapabilities.getSupportedFrameRates());
                     Log.e(TAG, "2 " + videoCapabilities.getSupportedHeights());
                     Log.e(TAG, "3 " + videoCapabilities.getSupportedWidths());
