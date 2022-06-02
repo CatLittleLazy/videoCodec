@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_outer_classname = "MediaGraphConfigProto";
+
+message CalculatorGraphConfig {
+  // A single node in the DAG.
+  message Node {
+    string name = 1;
+    string calculator = 2;
+    repeated string input_stream = 3;
+    repeated string output_stream = 4;
+  }
+  // The nodes.
+  repeated Node node = 1;
+  repeated string input_stream = 2;
+  repeated string output_stream = 3;
+}
