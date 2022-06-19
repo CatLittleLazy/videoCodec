@@ -17,4 +17,5 @@
     <string name="exoplayer">exoPlayer</string>
     <string name="current_video_info">current Video Info</string>
     <string name="showimg">showImg</string>
+    <string name="meidapipe">meidaPipe</string>
 </resources>

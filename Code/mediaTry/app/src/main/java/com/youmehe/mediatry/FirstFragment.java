@@ -1,7 +1,10 @@
 package com.youmehe.mediatry;
 
+import static com.youmehe.mediatry.Utils.TAG;
+
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import com.youmehe.mediatry.MediaGraphConfigProto.*;
 
 import java.io.File;
 
@@ -40,8 +44,28 @@ public class FirstFragment extends Fragment {
                 .setOnClickListener(view1 -> NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(R.id.action_FirstFragment_to_MyExoFragment));
 
+        view.findViewById(R.id.mediaPipe)
+            .setOnClickListener(view1 -> testMediaPipe());
+
         initSurface(view.findViewById(R.id.surface));
 //    showVideoImage(view.findViewById(R.id.image));
+    }
+
+    private void testMediaPipe() {
+        MediaGraphConfig.Node node1 = MediaGraphConfig.Node.newBuilder()
+            .setName("lut")
+            .setCalculator("PipeNode")
+            .addInputStream("input")
+            .addOutputStream("output")
+            .build();
+
+        MediaGraphConfig mediaGraphConfig = MediaGraphConfig.newBuilder()
+            .addNode(node1)
+            .addInputStream("input")
+            .addOutputStream("output")
+            .build();
+
+        Log.e(TAG, mediaGraphConfig.toString());
     }
 
     public void showVideoImage(ImageView imageView) {

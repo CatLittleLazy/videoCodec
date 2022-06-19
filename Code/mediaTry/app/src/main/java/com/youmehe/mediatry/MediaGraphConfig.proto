@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option java_outer_classname = "MediaGraphConfigProto";
 
-message CalculatorGraphConfig {
+message MediaGraphConfig {
   // A single node in the DAG.
   message Node {
     string name = 1;
