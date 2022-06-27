@@ -118,3 +118,13 @@ return graph.WaitUntilDone();
 
 
 ![image-20220620003404053](protoLearn.assets/image-20220620003404053.png)
+
+
+
+Bazel[编译选项](https://bazel.build/reference/command-line-reference)
+
+![image-20220623234055867](protoLearn.assets/image-20220623234055867.png)
+
+
+
+https://stackoverflow.com/questions/45007565/protobuf-android-includes-build-type-in-generated-folders
