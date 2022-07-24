@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.youmehe.mediatry.WytEncoders;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // 先判断有没有权限
             if (Environment.isExternalStorageManager()) {
-                Toast.makeText(this, "Android VERSION  R OR ABOVE，HAVE MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
+                protoTest();
+                Toast.makeText(this, "2Android VERSION  R OR ABOVE，HAVE MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Android VERSION  R OR ABOVE，NO MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "1Android VERSION  R OR ABOVE，NO MANAGE_EXTERNAL_STORAGE GRANTED!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                 intent.setData(Uri.parse("package:" + this.getPackageName()));
                 startActivityForResult(intent, 2);
+                protoTest();
             }
         }
     }
@@ -85,6 +89,32 @@ public class MainActivity extends AppCompatActivity {
 //        checkPermission();
     }
 
+    public void protoTest() {
+        WytEncoders.Encoders encoders = WytEncoders.Encoders.newBuilder()
+            .addMediaCodec(WytEncoders.Encoders.mediaCodec.newBuilder()
+                .setName("c2.android.h263.encoder")
+                .setType("video/3gpp")
+                .setAlias(WytEncoders.Encoders.alias.newBuilder()
+                    .setName("OXM.google.h263.encoder")
+                    .build())
+                .addLimit(WytEncoders.Encoders.limit.newBuilder()
+                    .setName("size")
+                    .setMin("176x144")
+                    .setMax("176x144")
+                    .build())
+                .addLimit(WytEncoders.Encoders.limit.newBuilder()
+                    .setName("alignment")
+                    .setValue("16x16")
+                    .build())
+                .addLimit(WytEncoders.Encoders.limit.newBuilder()
+                    .setName("bitrate")
+                    .setRange("1-1280000")
+                    .build())
+                .build())
+            .build();
+
+        Log.e("wyt proto", "\n1\n" + encoders.toString());
+    }
     @Override
     protected void onStart() {
         super.onStart();

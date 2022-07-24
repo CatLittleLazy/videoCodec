@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_package = "com.youmehe.mediatry";
+option java_outer_classname = "WytEncoders";
+
+message Encoders {
+  message alias {
+    string name = 1;
+  }
+  message limit {
+    string name = 1;
+    string min = 2;
+    string max = 3;
+    string value = 4;
+    string range = 5;
+  }
+  message mediaCodec {
+    string name = 1;
+    string type = 2;
+    alias Alias = 3;
+    repeated limit Limit = 4;
+  }
+  repeated mediaCodec MediaCodec = 1;
+}

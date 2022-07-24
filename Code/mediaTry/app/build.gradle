@@ -62,7 +62,9 @@ protobuf {
           outputSubDir = '../../../../../src/main/java/com/youmehe/mediatry/'
         }
       }
-      task.plugins {}
+      task.plugins {
+        java{}
+      }
     }
     ofBuildType('release')
   }

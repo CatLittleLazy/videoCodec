@@ -128,3 +128,14 @@ Bazel[编译选项](https://bazel.build/reference/command-line-reference)
 
 
 https://stackoverflow.com/questions/45007565/protobuf-android-includes-build-type-in-generated-folders
+
+
+
+
+
+| XML                   | JSon | ProtoBuf |
+| --------------------- | ---- | -------- |
+| <Group><br /></Group> |      |          |
+|                       |      |          |
+|                       |      |          |
+
