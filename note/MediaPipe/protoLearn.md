@@ -133,9 +133,103 @@ https://stackoverflow.com/questions/45007565/protobuf-android-includes-build-typ
 
 
 
-| XML                   | JSon | ProtoBuf |
-| --------------------- | ---- | -------- |
-| <Group><br /></Group> |      |          |
-|                       |      |          |
-|                       |      |          |
+![image-20220803001851698](protoLearn.assets/image-20220803001851698.png)
+
+
+
+xml
+
+<MediaCodec name="c2.android.h263.encoder" type="video/3gpp">
+
+​    <Alias name="OMX.google.h263.encoder" />
+
+​    <!-- profiles and levels:  ProfileBaseline : Level45 -->
+
+​    <Limit name="size" min="176x144" max="176x144" />
+
+​    <Limit name="alignment" value="16x16" />
+
+​    <Limit name="bitrate" range="1-128000" />
+
+</MediaCodec>
+
+Json
+
+<pre>
+{
+  "MediaCodec": {
+    "name": "c2.android.h263.encoder",
+    "type": "video/3gpp",
+    "Alias": { "name": "OMX.google.h263.encoder" },
+    "Limit": [
+      {
+        "name": "size",
+        "min": "176x144",
+        "max": "176x144"
+      },
+      {
+        "name": "alignment",
+        "value": "16x16"
+      },
+      {
+        "name": "bitrate",
+        "range": "1-128000"
+      }
+    ]
+  }
+}
+</pre>
+
+
+
+ProtoBuf
+
+<pre>
+MediaCodec {
+    name: "c2.android.h263.encoder"
+    type: "video/3gpp"
+    Alias {
+        name: "OXM.google.h263.encoder"
+    }
+    Limit {
+        name: "size"
+        min: "176x144"
+        max: "176x144"
+    }
+    Limit {
+        name: "alignment"
+        value: "16x16"
+    }
+    Limit {
+        name: "bitrate"
+        range: "1-1280000"
+    }
+}
+</pre>
+
+
+
+ProtoBuf3 Template
+
+<pre>
+message Encoders {
+  message alias {
+    string name = 1;
+  }
+  message limit {
+    string name = 1;
+    string min = 2;
+    string max = 3;
+    string value = 4;
+    string range = 5;
+  }
+  message mediaCodec {
+    string name = 1;
+    string type = 2;
+    alias Alias = 3;
+    repeated limit Limit = 4;
+  }
+  repeated mediaCodec MediaCodec = 1;
+}
+</pre>
 
