@@ -1,0 +1,12 @@
+@startuml
+MediaCodec.cpp -> MediaCodecList.cpp:CreateByType(7params)
+MediaCodecList.cpp -> MediaCodecList.cpp:findMatchingCodecs(5params)
+group findMatchingCodecs [const char *mime, \nbool encoder, \nuint32_t flags, \nsp<AMessage> format, \nVector<AString> *matches]
+    loop true(遍历完所有的codec)
+        MediaCodecList.cpp -> MediaCodecList.cpp::codecHandlesFormat(3params)
+    end
+end
+
+
+
+@enduml

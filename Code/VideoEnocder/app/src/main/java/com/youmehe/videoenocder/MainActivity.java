@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     try {
       mediaCodec = MediaCodec.createEncoderByType("video/avc");
       MediaFormat mediaFormat =
-          MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_SCRAMBLED, 1920, 1080);
+          MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, 1920, 1080);
       mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 15);
       //2秒中1个I帧
       mediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 30);
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC, surface, null, null);
         while (true) {
           MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-          int outIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, 100000);
+          int outIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, 0);
           Log.i("encoder", "run" + outIndex);
           if (outIndex >= 0) {
             // byteBuffer 是压缩数据

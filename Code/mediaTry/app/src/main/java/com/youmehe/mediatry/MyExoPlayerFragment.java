@@ -259,6 +259,14 @@ public class MyExoPlayerFragment extends Fragment {
 
                     Log.e(TAG, "1 " + videoCapabilities.getSupportedFrameRates());
                     Log.e(TAG, "2 " + videoCapabilities.getSupportedHeights());
+                    // eg.1
+                    int maxHeight1 = videoCapabilities.getSupportedHeights().getUpper();
+                    int maxWidth1 = videoCapabilities.getSupportedWidthsFor(maxHeight1).getLower();
+
+                    // eg.2
+                    int maxWidth2 = videoCapabilities.getSupportedWidths().getUpper();
+                    int maxHeight2 = videoCapabilities.getSupportedHeightsFor(maxWidth2).getUpper();
+
                     Log.e(TAG, "3 " + videoCapabilities.getSupportedWidths());
                     Log.e(TAG, "4 " + videoCapabilities.getBitrateRange());
                 }
