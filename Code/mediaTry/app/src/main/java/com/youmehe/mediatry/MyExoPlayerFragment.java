@@ -250,7 +250,7 @@ public class MyExoPlayerFragment extends Fragment {
         Log.e(TAG, test.toString());
         MediaCodecList mcl = new MediaCodecList(MediaCodecList.ALL_CODECS);
         for (MediaCodecInfo tmp : mcl.getCodecInfos()) {
-            if (tmp.getSupportedTypes()[0].contains("video") && !tmp.isAlias() && !tmp.isEncoder() && (tmp.getName().contains("mpeg4") || tmp.getName().contains("mpeg2"))) {
+            if (tmp.getSupportedTypes()[0].contains("video") && !tmp.isAlias() && !tmp.isEncoder() && (tmp.getName().contains("avc") || tmp.getName().contains("hevc"))) {
                 Log.e(TAG, tmp.getName() + "_" + Arrays.toString(tmp.getSupportedTypes()));
                 for (String type : tmp.getSupportedTypes()) {
 //                    MediaCodecInfo.CodecCapabilities capabilities = tmp.getCapabilitiesForType("video/mp4v-es");

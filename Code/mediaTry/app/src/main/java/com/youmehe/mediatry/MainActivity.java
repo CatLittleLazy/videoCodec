@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 .build())
             .build();
 
-        Log.e("wyt proto", "\n1\n" + encoders.toString());
+        Log.e("wyt proto", "\n1F\n" + encoders.toString());
     }
     @Override
     protected void onStart() {

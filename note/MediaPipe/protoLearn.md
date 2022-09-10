@@ -139,6 +139,8 @@ https://stackoverflow.com/questions/45007565/protobuf-android-includes-build-typ
 
 xml
 
+"
+
 <MediaCodec name="c2.android.h263.encoder" type="video/3gpp">
 
 ​    <Alias name="OMX.google.h263.encoder" />
@@ -152,6 +154,8 @@ xml
 ​    <Limit name="bitrate" range="1-128000" />
 
 </MediaCodec>
+
+"
 
 Json
 
