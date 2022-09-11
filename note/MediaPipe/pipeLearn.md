@@ -43,7 +43,7 @@ https://github.com/google/mediapipe
 
 ## 5.solution
 
-## 6.profiler
+## 6.[profiler](https://google.github.io/mediapipe/tools/tracing_and_profiling.html)
 
 1、主要通过跟踪器、分析器完成性能分析
 
@@ -81,7 +81,7 @@ https://github.com/google/mediapipe
    2. 每5s后，写入转移到连续的跟踪日志文件
 5. 下载文件，adb pull sdcard/Download/
 
-6、真实实践
+6、真实实践(预置条件)
 
 1. 上来直接编译报错了，使用如下命令清理下缓存
    1. bazel clean --expunge
@@ -127,3 +127,49 @@ https://github.com/google/mediapipe
 10. 接下来使用前文编译命令即可编译成功
 
     ![image-20220910014028528](pipeLearn.assets/image-20220910014028528.png)
+
+7、真实实践
+
+1. 执行如下命令编译出官网Android的helloworld测试demo，并安装到手机，查看当前效果如下：
+
+   ![image-20220911201057059](pipeLearn.assets/image-20220911201057059.png)
+
+2. 找到该demo的对应proto配置文件，加入如下内容：
+
+   ![image-20220911202159008](pipeLearn.assets/image-20220911202159008.png)
+
+3. 重新编译后再次安装，查看日志，搜索关键字mediapipe，可以看到相关内容
+
+   ![image-20220911202526615](pipeLearn.assets/image-20220911202526615.png)
+
+4. 运行一段时间后关闭程序，通过【adb pull sdcard/Download】命令获取日志
+
+   ![image-20220911202742733](pipeLearn.assets/image-20220911202742733.png)
+
+5. 可以看到日志保存格式为proto二进制，[此时通过官网提供的网址打开](https://viz.mediapipe.dev/)，以【0.binarypb】为例
+
+   ![image-20220911203454160](pipeLearn.assets/image-20220911203454160.png)
+
+6. 从图中就可以看到本次执行抓取到的性能日志，根据官网解释添加上对应说明
+
+   ![image-20220911223433598](pipeLearn.assets/image-20220911223433598.png)
+
+7. 关于profile[的更多配置官网也给出部分解释](https://google.github.io/mediapipe/tools/tracing_and_profiling.html#profiler-configuration)，实际上的使用还是看具体业务
+
+   ![image-20220911223537416](pipeLearn.assets/image-20220911223537416.png)
+
+8. 可视化部分也可以看到时间线上的部分信息（遗留）
+
+   ![image-20220911223901884](pipeLearn.assets/image-20220911223901884.png)
+
+## 7.profiler代码
+
+
+
+
+
+
+
+
+
+https://blog.csdn.net/pingchangxin_6/article/details/125676584
