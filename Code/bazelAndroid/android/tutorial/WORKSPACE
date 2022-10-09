@@ -1,0 +1,2 @@
+android_sdk_repository(name = "androidsdk", path = "/home/youmehe/Android/Sdk")
+android_ndk_repository(name = "androidndk", api_level=21, path = "/home/youmehe/Android/Sdk/ndk-bundle/android-ndk-r21")

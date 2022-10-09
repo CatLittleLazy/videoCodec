@@ -114,3 +114,12 @@ https://github.com/teejee2008/timeshift
 
 https://www.cnblogs.com/pipiyan/p/10600058.html
 
+### for root editor use chinese(studio不能添加在最后)
+
+http://t.zoukankan.com/jiangfeilong-p-11148516.html
+
+
+
+### add bazel for root
+
+https://blog.csdn.net/Guo_Python/article/details/116171093

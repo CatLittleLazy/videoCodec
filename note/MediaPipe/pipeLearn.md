@@ -164,6 +164,8 @@ https://github.com/google/mediapipe
 
 ## 7.profiler代码
 
+1. ​	mediaPipe编译使用了bazel，所以跟protoBuf一样，还是需要简单入个门，方便调试
+
 
 
 
