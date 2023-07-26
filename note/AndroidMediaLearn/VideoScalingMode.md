@@ -62,7 +62,7 @@
 
 6. 目前对该接口简单的了解了，那么我们在demo中进行调用(测试该值写入3，0可以，写入其他值会不显示最终crash)
 
-   1. 设置为 VIDEO_SCALING_MODE_SCALE_TO_FIT 时 完全填充不出现变形
+   1. 设置为 VIDEO_SCALING_MODE_SCALE_TO_FIT 时 完全填充导致出现变形
 
       ![image-20230727010538471](VideoScalingMode.assets/image-20230727010538471.png)
 
