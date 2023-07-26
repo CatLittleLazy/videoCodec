@@ -40,3 +40,5 @@
     ![image-20230703230851922](HDRImage.assets/image-20230703230851922.png)
 
 12. http://www.electronicimaging.org
+
+13. https://github.com/android/camera-samples
