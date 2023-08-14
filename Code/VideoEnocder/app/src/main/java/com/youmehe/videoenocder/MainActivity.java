@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.hardware.display.DisplayManager;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
 import android.media.MediaFormat;
 import android.media.MediaPlayer;
 import android.media.projection.MediaProjection;
@@ -21,6 +22,8 @@ import android.view.Surface;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.VideoView;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,20 +40,64 @@ public class MainActivity extends AppCompatActivity {
   private MediaProjection mediaProjection;
   private MediaProjectionManager mediaProjectionManager;
   private MediaCodec mediaCodec;
+  VideoView videoView;
+  VideoEncoder videoEncoder;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     checkPermission();
+    videoView = findViewById(R.id.videoview);
     this.mediaProjectionManager =
         (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
     Intent captureIntent = mediaProjectionManager.createScreenCaptureIntent();
     findViewById(R.id.projection).setOnClickListener((view) -> {
       startActivityForResult(captureIntent, 100);
+      mediaPlay("VID_20230717_003133.mp4");
     });
     findViewById(R.id.testRecorderMPEG2TS).setOnClickListener((view) -> {
       startActivity(new Intent(MainActivity.this, CtsRecoderMpeg2Ts.class));
+    });
+    findViewById(R.id.stop_encoder).setOnClickListener((view) -> {
+      videoEncoder.release();
+      new Thread(()->{
+        try {
+          Thread.sleep(1100);
+          runOnUiThread(()->{
+            mediaPlay("codec.mp4");
+          });
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }).start();
+    });
+
+    String mimeType = "video/hevc";
+    MediaCodecInfo codecInfo = null;
+    for (int i = 0; i < MediaCodecList.getCodecCount(); i++) {
+      MediaCodecInfo info = MediaCodecList.getCodecInfoAt(i);
+      if (!info.isEncoder()) {
+        continue;
+      }
+      String[] types = info.getSupportedTypes();
+      for (String type : types) {
+        if (type.equalsIgnoreCase(mimeType)) {
+          codecInfo = info;
+          break;
+        }
+      }
+      if (codecInfo != null) {
+        break;
+      }
+    }
+  }
+
+  private void mediaPlay(String fileName) {
+    videoView.setVideoPath(Environment.getExternalStorageDirectory() + "/Movies/" + fileName);
+    videoView.start();
+    videoView.setOnCompletionListener(mediaPlayer -> {
+      videoView.start();
     });
   }
 
@@ -109,7 +156,9 @@ public class MainActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == 100 && resultCode == RESULT_OK) {
       mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
-      initMediaCodec();
+//      initMediaCodec();
+      videoEncoder = new VideoEncoder();
+      videoEncoder.init(Environment.getExternalStorageDirectory() + "/Movies/codec.mp4", 1920, 1080, mediaProjection);
     }
   }
 
