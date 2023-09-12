@@ -21,8 +21,11 @@ public:
     void extractor(int fd);
     void codecOnce();
     void doCodecWork();
+    void setWindow(ANativeWindow *);
+    ANativeWindow* getWindow() const;
     AMediaCodec *codec = nullptr;
     AMediaExtractor *ex;
+    ANativeWindow *window;
     bool sawInputEOS = false;
     bool sawOutputEOS = false;
     bool isPlaying = false;

@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.Gainmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -70,17 +72,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        setContentView(R.layout.activity_main);
-        setContentView(R.layout.content_main);
-
+        // 添加如下代码实现截屏录屏投屏黑屏
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+//        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.content_main);
 //        imageView = findViewById(R.id.img_show);
 //        animationDrawable = (AnimationDrawable) imageView.getBackground();
 //        //开始
-//        startbtn = findViewById(R.id.btn_start);
-//        startbtn.setOnClickListener(view -> {
+        startbtn = findViewById(R.id.btn_start);
+        startbtn.setOnClickListener(view -> {
 ////            animationDrawable.start();
-//            tryPlayer();
-//        });
+            tryPlayer();
+        });
 //
 //
 //        //结束
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 1; i++) {
             MediaPlayer mediaPlayer = new MediaPlayer();
             try {
-                mediaPlayer.setDataSource("sdcard/videosource/128x128_h264_albumart.mp4");
+                mediaPlayer.setDataSource("sdcard/videosource/SL_MO_VID_20211208_213359.mp4");
                 mediaPlayerList.add(mediaPlayer);
                 mediaPlayer.setDisplay(null);
                 mediaPlayer.prepare();

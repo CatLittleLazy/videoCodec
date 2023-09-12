@@ -5,6 +5,7 @@
 #include <media/NdkMediaFormat.h>
 #include <media/NdkMediaCodec.h>
 #include <media/NdkMediaExtractor.h>
+#include <android/native_window.h>
 #include "CodecTry.h"
 static std::shared_ptr<CodecTry> single;
 
@@ -55,15 +56,26 @@ void CodecTry::extractor(int fd) {
             // Production code should check for errors.
             AMediaExtractor_selectTrack(ex, i);
             if (codec == nullptr) {
+                LOGV("create codec");
                 codec = AMediaCodec_createDecoderByType(mime);
             }
 //            AMediaCodec_configure(codec, format, window, NULL, 0);
-            if (!isPlaying) {
-                media_status_t status = AMediaCodec_configure(codec, format, nullptr, nullptr, 0);
+//            if (!isPlaying) {
+            int result = ANativeWindow_setBuffersGeometry(window, 200, 200, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM);
+            ANativeWindow_acquire(window);
+            int32_t rotation = -1;
+            bool ret = AMediaFormat_getInt32(format, AMEDIAFORMAT_KEY_ROTATION, &rotation);
+            LOGV("result is %d, ret = %d, rotation = %d", result, ret, rotation);
+            if (rotation == -1) {
+                AMediaFormat_setInt32(format, AMEDIAFORMAT_KEY_ROTATION, 0);
+            }
+            AMediaFormat_setInt32(format, "android._video-scaling", 1);
+
+            media_status_t status = AMediaCodec_configure(codec, format, window, nullptr, 0);
                 if (status == AMEDIA_OK) {
                     LOGV("configure 成功");
                 }
-            }
+//            }
 //            ex = ex;
 //            codec = codec;
 //            renderstart = -1;
@@ -71,11 +83,11 @@ void CodecTry::extractor(int fd) {
 //            sawOutputEOS = false;
 //            isPlaying = false;
 //            renderonce = true;
-            if (!isPlaying) {
+//            if (!isPlaying) {
                 LOGV("codec start");
                 AMediaCodec_start(codec);
-                isPlaying = true;
-            }
+//                isPlaying = true;
+//            }
         }
         AMediaFormat_delete(format);
     }
@@ -120,8 +132,9 @@ void CodecTry::codecOnce() {
 //            if (delay > 0) {
                 //usleep(delay / 1000);
 //            }
-//            AMediaCodec_releaseOutputBuffer(codec, status, info.size != 0);
-            media_status_t err = AMediaCodec_releaseOutputBuffer(codec, status, false);
+            LOGV("info size is %d",info.size);
+            media_status_t err = AMediaCodec_releaseOutputBuffer(codec, status, info.size != 0);
+//            media_status_t err = AMediaCodec_releaseOutputBuffer(codec, status, false);
             if (err == AMEDIA_OK) {
                 LOGV("release codec --> %lld", info.presentationTimeUs);
             }
@@ -133,7 +146,8 @@ void CodecTry::codecOnce() {
             LOGV("output buffers changed");
         } else if (status == AMEDIACODEC_INFO_OUTPUT_FORMAT_CHANGED) {
             auto format = AMediaCodec_getOutputFormat(codec);
-            LOGV("format changed to: %s", AMediaFormat_toString(format));
+            LOGV("wyt format changed to: %s", AMediaFormat_toString(format));
+            AMediaFormat_setInt32(format, "android._video-scaling", 1);
             AMediaFormat_delete(format);
         } else if (status == AMEDIACODEC_INFO_TRY_AGAIN_LATER) {
             LOGV("no output buffer right now");
@@ -150,13 +164,22 @@ void CodecTry::codecOnce() {
 void CodecTry::doCodecWork() {
     LOGV("doCodecWork start");
     int i = 0;
-    while(i < 100) {
-        i ++;
+//    while(i < 100) {
+    while(!sawOutputEOS) {
+//        i ++;
         codecOnce();
     }
     sawInputEOS = false;
     sawOutputEOS = false;
-//    AMediaCodec_flush(codec);
-//    AMediaCodec_stop(codec);
+    AMediaCodec_flush(codec);
+    AMediaCodec_stop(codec);
     LOGV("doCodecWork done");
+}
+
+void CodecTry::setWindow(ANativeWindow * aNativeWindow) {
+    window = aNativeWindow;
+}
+
+ANativeWindow *CodecTry::getWindow() const {
+    return window;
 }

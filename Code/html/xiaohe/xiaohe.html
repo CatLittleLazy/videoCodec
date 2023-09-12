@@ -1,0 +1,34 @@
+<html>
+    <head>
+      <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+      <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    </head>
+
+  <body>
+    <h1>Let's plot random numbers</h1>
+    <div id="plot"></div>
+    <py-config type="toml">
+        packages = ["requests", "urllib3", "SSL"]
+
+        [[fetch]]
+        files = ["./xiaohe.py"]
+    </py-config>
+    <py-script>
+        from js import XMLHttpRequest, Blob
+        import json
+        data = {"a": 1}
+
+        req = XMLHttpRequest.new()
+        req.open("POST", "https://httpbin.org/anything", False)
+        blob = Blob.new([json.dumps(data)], {type : 'application/json'})
+        req.send(blob)
+        print(str(req.response))
+
+        file = open('test.txt','w')
+        # 向文件中输入字符串
+        file.write(str(req.response))
+        file.close()
+        print("所有类型股票数据已成功写入")
+    </py-script>
+  </body>
+</html>

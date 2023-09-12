@@ -1,0 +1,14 @@
+com.polar.androidcommunications.polar-core-ktx-1.9.0-0 /home/youmehe/.gradle/caches/transforms-3/088f36aae7e8e7d28966fc718205efab/transformed/core-ktx-1.9.0/res
+com.polar.androidcommunications.polar-core-1.9.0-1 /home/youmehe/.gradle/caches/transforms-3/6e2d16b27099b5b1b9368447d68720e5/transformed/core-1.9.0/res
+com.polar.androidcommunications.polar-annotation-experimental-1.3.0-2 /home/youmehe/.gradle/caches/transforms-3/d38f4fa3b531fa1f07fe807a7620af1f/transformed/annotation-experimental-1.3.0/res
+com.polar.androidcommunications.polar-lifecycle-runtime-2.3.1-3 /home/youmehe/.gradle/caches/transforms-3/ec41ae4ff286a787036d43eb68c50035/transformed/lifecycle-runtime-2.3.1/res
+com.polar.androidcommunications.polar-sdk-4 /home/youmehe/videoCodec/Code/Polar/polar/build/generated/res/pngs/sdk/release
+com.polar.androidcommunications.polar-sdk-5 /home/youmehe/videoCodec/Code/Polar/polar/build/generated/res/resValues/sdk/release
+com.polar.androidcommunications.polar-sdk-6 /home/youmehe/videoCodec/Code/Polar/polar/build/generated/res/rs/sdk/release
+com.polar.androidcommunications.polar-mergeSdkReleaseResources-7 /home/youmehe/videoCodec/Code/Polar/polar/build/intermediates/incremental/sdkRelease/mergeSdkReleaseResources/merged.dir
+com.polar.androidcommunications.polar-mergeSdkReleaseResources-8 /home/youmehe/videoCodec/Code/Polar/polar/build/intermediates/incremental/sdkRelease/mergeSdkReleaseResources/stripped.dir
+com.polar.androidcommunications.polar-merged_res-9 /home/youmehe/videoCodec/Code/Polar/polar/build/intermediates/merged_res/sdkRelease
+com.polar.androidcommunications.polar-main-10 /home/youmehe/videoCodec/Code/Polar/polar/src/main/res
+com.polar.androidcommunications.polar-release-11 /home/youmehe/videoCodec/Code/Polar/polar/src/release/res
+com.polar.androidcommunications.polar-sdk-12 /home/youmehe/videoCodec/Code/Polar/polar/src/sdk/res
+com.polar.androidcommunications.polar-sdkRelease-13 /home/youmehe/videoCodec/Code/Polar/polar/src/sdkRelease/res

@@ -200,6 +200,7 @@ public class MyExoPlayerFragment extends Fragment {
             items.add("该手机共识别到 " + tracks + " 条轨道");
             for (int i = 0; i < tracks; i++) {
                 MediaFormat format = mediaExtractor.getTrackFormat(i);
+                Log.e("wyt", format.toString());
                 if (format.getString("mime").contains("video")) {
                     Class<? extends MediaFormat> mFormatClass = format.getClass();
                     try {

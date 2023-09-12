@@ -24,7 +24,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.VideoView;
 
+import org.mp4parser.Box;
+import org.mp4parser.IsoFile;
+import org.mp4parser.boxes.UserBox;
+import org.mp4parser.boxes.iso14496.part12.MovieBox;
+import org.mp4parser.boxes.iso14496.part12.SampleDescriptionBox;
+import org.mp4parser.boxes.iso14496.part12.TrackBox;
+import org.mp4parser.boxes.iso14496.part12.XmlBox;
+import org.mp4parser.tools.Path;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -90,6 +100,28 @@ public class MainActivity extends AppCompatActivity {
       if (codecInfo != null) {
         break;
       }
+    }
+    tryToGetBox();
+  }
+
+  public void tryToGetBox() {
+    IsoFile isoFile = null;
+    try {
+//      FileInputStream fileInputStream = new FileInputStream("sdcard/Movies/crowd_run_1920x1080_30fps_avc.mp4");
+      String path = Environment.getExternalStorageDirectory() + "/Movies/crowd_run_1920x1080_30fps_hevc.mp4";
+      Log.i("wyt", path);
+      FileInputStream fileInputStream = new FileInputStream(path);
+      isoFile = new IsoFile(fileInputStream.getChannel());
+      //isoFile = new IsoFile(Channels.newChannel(new FileInputStream(this.filePath)));
+      //Path path = new Path(isoFile);
+      SampleDescriptionBox sampleDescriptionBox = (SampleDescriptionBox) Path.getPath(isoFile, "moov/trak/mdia/minf/stbl/stsd");
+      for(Box box : sampleDescriptionBox.getBoxes()) {
+        Log.i("wyt", box.getType());
+      }
+      String xml = sampleDescriptionBox.toString();
+      Log.i("wyt", "sampleDescriptionBox info is " + xml);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 

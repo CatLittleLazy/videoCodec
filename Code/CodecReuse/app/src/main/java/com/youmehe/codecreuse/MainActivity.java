@@ -7,16 +7,21 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.youmehe.codecreuse.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     // Used to load the 'codecreuse' library on application startup.
     static {
@@ -65,6 +70,34 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "未选择文件", Toast.LENGTH_SHORT).show();
             }
         });
+        binding.btnGetRange.setOnClickListener(v-> {
+            getRange();
+        });
+
+        binding.surface.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(@NonNull SurfaceHolder holder) {
+                Log.v(TAG, "surfaceCreated");
+                steSurface(holder.getSurface());
+            }
+
+            @Override
+            public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
+                Log.v(TAG, "surfaceChanged");
+
+            }
+
+            @Override
+            public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
+                Log.v(TAG, "surfaceDestroyed");
+
+            }
+        });
+    }
+
+    private native void steSurface(Surface surface);
+
+    public void getRange() {
     }
 
     public void selectFile() {

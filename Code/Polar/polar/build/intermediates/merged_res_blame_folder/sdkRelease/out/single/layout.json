@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.polar.androidcommunications.polar-merged_res-8:/layout/custom_dialog.xml",
+        "source": "com.polar.androidcommunications.polar-core-1.9.0-1:/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "com.polar.androidcommunications.polar-merged_res-8:/layout/notification_template_part_time.xml",
+        "source": "com.polar.androidcommunications.polar-core-1.9.0-1:/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "com.polar.androidcommunications.polar-merged_res-8:/layout/notification_template_part_chronometer.xml",
+        "source": "com.polar.androidcommunications.polar-core-1.9.0-1:/layout/notification_template_part_chronometer.xml"
+    }
+]
