@@ -35,6 +35,34 @@
 
 4. 接下来接着梳理下逻辑，搞个桌面小组件或者在手表上做个demo，还是得想办法解决掉不提示的问题，要不真的太麻烦了
 
+   1. 重新下载安装android [studio](https://developer.android.com/studio). 
+
+      ![image-20230819224457425](polar应用.assets/image-20230819224457425.png)
+
+   2. 升级AGP至7.4.2
+
+      ![image-20230819224532997](polar应用.assets/image-20230819224532997.png)
+
+   3. 在task中编译出polar的aar包，引入至项目中
+
+      ![image-20230819224613651](polar应用.assets/image-20230819224613651.png)![image-20230819224623187](polar应用.assets/image-20230819224623187.png)![image-20230819224642027](polar应用.assets/image-20230819224642027.png)
+
+   4. 目前代码飘红问题已解决
+
+      ![image-20230819224728440](polar应用.assets/image-20230819224728440.png)
+
+5. 目前已经可以连接并获取到到心率，所以打算今晚睡觉带一晚，统计下今晚的睡觉的心率信息
+
+   1. 先在界面上显示心率
+
+      ![image-20230819232948308](polar应用.assets/image-20230819232948308.png)
+
+   2. 画图使用 [开源库MPAndroidChart](https://weeklycoding.com/mpandroidchart/)
+
+   3. [查看文档](https://weeklycoding.com/mpandroidchart-documentation/)
+
+6. 
+
 
 
 
@@ -46,3 +74,7 @@
 项目配置调整
 
 https://blog.csdn.net/qq_41811862/article/details/121114332
+
+
+
+https://blog.csdn.net/yangyulong0622/article/details/122179407
