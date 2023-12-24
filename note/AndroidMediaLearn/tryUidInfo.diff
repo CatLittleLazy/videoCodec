@@ -1,0 +1,131 @@
+diff --git a/media/libstagefright/Android.bp b/media/libstagefright/Android.bp
+index a052a7050b..8a2bd85664 100644
+--- a/media/libstagefright/Android.bp
++++ b/media/libstagefright/Android.bp
+@@ -340,6 +340,8 @@ cc_library {
+         "android.hardware.media.omx@1.0",
+         "framework-permission-aidl-cpp",
+         "libaudioclient_aidl_conversion",
++        "mediametricsservice-aidl-cpp",
++        "libmediautils",
+     ],
+ 
+     static_libs: [
+@@ -363,6 +365,7 @@ cc_library {
+         "libstagefright_xmlparser_headers",
+         "media_ndk_headers",
+         "libmediaformatshaper_headers",
++        "libmediametrics_headers",
+     ],
+ 
+     export_shared_lib_headers: [
+@@ -370,13 +373,20 @@ cc_library {
+         "libhidlmemory",
+         "libmedia",
+         "android.hidl.allocator@1.0",
+-        "framework-permission-aidl-cpp",
+     ],
+ 
+     export_include_dirs: [
+         "include",
+     ],
+ 
++    include_dirs: [
++        "frameworks/av/services/mediametrics",
++        "frameworks/av/media/utils/include",
++        "frameworks/native/libs/permission/include",
++        "packages/modules/StatsD/lib/libstatspull/include",
++        "packages/modules/StatsD/lib/libstatssocket/include",
++    ],
++
+     cflags: [
+         "-Wno-multichar",
+         "-Werror",
+diff --git a/media/libstagefright/MediaCodec.cpp b/media/libstagefright/MediaCodec.cpp
+index c03236a8cc..28e26c46c6 100644
+--- a/media/libstagefright/MediaCodec.cpp
++++ b/media/libstagefright/MediaCodec.cpp
+@@ -14,7 +14,7 @@
+  * limitations under the License.
+  */
+ 
+-//#define LOG_NDEBUG 0
++#define LOG_NDEBUG 0
+ #include "hidl/HidlSupport.h"
+ #define LOG_TAG "MediaCodec"
+ #include <utils/Log.h>
+@@ -82,6 +82,7 @@
+ #include <nativeloader/dlext_namespaces.h>
+ #include <private/android_filesystem_config.h>
+ #include <utils/Singleton.h>
++#include "MediaMetricsService.h"
+ 
+ namespace android {
+ 
+@@ -89,6 +90,7 @@ using Status = ::ndk::ScopedAStatus;
+ using aidl::android::media::BnResourceManagerClient;
+ using aidl::android::media::IResourceManagerClient;
+ using aidl::android::media::IResourceManagerService;
++using media::BnMediaMetricsService;
+ 
+ // key for media statistics
+ static const char *kCodecKeyName = "codec";
+@@ -773,6 +775,7 @@ MediaCodec::MediaCodec(
+       mInputBufferCounter(0),
+       mGetCodecBase(getCodecBase),
+       mGetCodecInfo(getCodecInfo) {
++    ALOGV("wyt current uid = %d, pid = %d", uid, pid);
+     if (uid == kNoUid) {
+         mUid = AIBinder_getCallingUid();
+     } else {
+@@ -1530,7 +1533,27 @@ status_t MediaCodec::configure(
+         format->findInt32("width", &mVideoWidth);
+         format->findInt32("height", &mVideoHeight);
+         if (!format->findInt32("rotation-degrees", &mRotationDegrees)) {
++            ALOGI("wyt not find rotation");
+             mRotationDegrees = 0;
++            format->setInt32("rotation-degrees", mRotationDegrees);
++        }
++        ALOGI("wyt current mRotation = %d", mRotationDegrees);
++        mUid = AIBinder_getCallingUid();
++//        std::string packageName;
++//        int64_t versionCode = 0;
++        ALOGI("wyt current Uid = %d", mUid);
++        if (mUid != -1) {
++            mediautils::UidInfo uidInfo;
++
++            // get info.
++            mediautils::UidInfo::Info info = uidInfo.getInfo(mUid);
++//            if (useUidForPackage(info.package, info.installer)) {
++//                return { std::to_string(uid), /* versionCode */ 0 };
++//            } else {
++//                return { info.package, info.versionCode };
++//            }
++//            MediaMetricsService::getSanitizedPackageNameAndVersionCode(mUid);
++            ALOGI("wyt current packageName = %s, versionCode = % " PRId64"", info.package.c_str(), info.versionCode);
+         }
+ 
+         if (mMetricsHandle != 0) {
+@@ -2338,12 +2361,14 @@ status_t MediaCodec::reclaim(bool force) {
+ }
+ 
+ status_t MediaCodec::release() {
++    ALOGD("MediaCodec release");
+     sp<AMessage> msg = new AMessage(kWhatRelease, this);
+     sp<AMessage> response;
+     return PostAndAwaitResponse(msg, &response);
+ }
+ 
+ status_t MediaCodec::releaseAsync(const sp<AMessage> &notify) {
++    ALOGD("MediaCodec releaseAsync");
+     sp<AMessage> msg = new AMessage(kWhatRelease, this);
+     msg->setMessage("async", notify);
+     sp<AMessage> response;
+@@ -3578,6 +3603,7 @@ void MediaCodec::onMessageReceived(const sp<AMessage> &msg) {
+                     mReleaseSurface.reset();
+ 
+                     if (mReplyID != nullptr) {
++                        //ALOGE("wyt release buffer");
+                         postPendingRepliesAndDeferredMessages("kWhatReleaseCompleted");
+                     }
+                     if (mAsyncReleaseCompleteNotification != nullptr) {

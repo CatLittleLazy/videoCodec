@@ -15,3 +15,10 @@ https://ffmpeg.org/ffmpeg.html
 ```
 ffmpeg -i in.mp4 -i IMAGE -map 0 -map 1 -c copy -c:v:1 png -disposition:v:1 attach_pic out.mp4
 ```
+
+### 
+
+### 3.抽取视频码流
+
+
+
